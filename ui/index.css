@@ -1,0 +1,264 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.top-bar {
+    text-align: center;
+    border-bottom: solid 0.05em;
+    border-color: #E0E0E0;
+    height: 50px;
+}
+
+.top-bar p {
+    line-height: 50px;
+}
+
+ul {
+    height: auto;
+    font-size: 120%;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    float: right;
+    overflow: hidden;
+    background-color: whitesmoke;
+}
+
+ul li {
+    float: left;
+    display: block;
+    padding: 20px 5px;
+}
+
+li:hover{
+    background: whitesmoke;
+}
+
+a{
+    text-decoration: none;
+    color: #468847;
+}
+a:hover{
+    color: blue;
+}
+
+#logo {
+    background: black;
+    color: white;
+}
+
+h5,
+h6 {
+    font-size: 120%;
+}
+
+#menuIcon {
+    display: none;
+}
+.main-content {
+    flex: 1;
+    height: 800px;
+    background-image: url("/ui/images/whistle.jpg");
+    background-size: cover;
+    opacity: 0.9;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.welcome {
+    flex: 1;
+    border-bottom: solid 0.05em;
+    border-color: #E0E0E0;
+}
+
+.footer {
+    height: 50px;
+}
+
+.message {
+    font-size: 120%;
+    display: grid;
+    grid-template-columns: 15% 1fr 1fr 1fr 15%;
+    grid-template-rows: 1fr;
+    grid-template-areas: ". left-message center-message right-message .";
+}
+
+.left-message {
+    grid-area: left-message;
+    text-align: center;
+}
+
+.center-message {
+    grid-area: center-message;
+    text-align: center;
+}
+
+.right-message {
+    grid-area: right-message;
+    text-align: center;
+}
+
+.welcome-head {
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stats-heading {
+    text-align: center;
+    font-size: 150%;
+}
+
+.stat-content {
+    display: grid;
+    grid-template-columns: 30% 40% 30%;
+    grid-template-rows: 1fr;
+    grid-template-areas: ". stat-content-center .";
+}
+
+.stat-content-center {
+    grid-area: stat-content-center;
+    text-align: center;
+    background-color: #010203;
+    opacity: 0.8;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-rows: 1fr;
+    grid-template-areas: "members stories resolved rejected"
+}
+
+.stat {
+    grid-area: members;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+}
+
+.stat i,
+h6,
+p {
+    margin-bottom: 10px;
+}
+
+.stories {
+    grid-area: stories;
+}
+
+.resolved {
+    grid-area: resolved;
+}
+
+.rejected {
+    grid-area: rejected;
+}
+
+#round {
+    border: solid red;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    border-style: dotted;
+}
+
+.stat-content-center p {
+    line-height: 50px;
+}
+
+.footer {
+    display: grid;
+    grid-template-columns: 15% 1fr 1fr 1fr 15%;
+    grid-template-rows: 1fr;
+    grid-template-areas: ". footer-right footer-center footer-left .";
+    text-align: center;
+    color: #020303;
+}
+
+.footer-right {
+    grid-area: footer-right;
+}
+
+.footer-left {
+    grid-area: footer-left;
+}
+
+.footer-center {
+    grid-area: footer-center;
+}
+
+@media screen and (max-width: 600px) {
+    .main-content {
+        opacity: 1;
+        background-color: red;
+    }
+    .top-bar {
+        display: none;
+    }
+    .message {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-areas: "left-message" "center-message" "right-message";
+    }
+
+    .stat-content {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        grid-template-areas: "stat-content-center";
+    }
+
+    .stat-content-center {
+        opacity: 1;
+        padding-top: 0 !important;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        grid-template-areas: "members" "stories" "resolved" "rejected";
+    }
+    .welcome {
+        margin-bottom: 0 !important;
+    }
+    .footer {
+        height: 50px;
+    }
+
+    #menuIcon {
+        display: block;
+    }
+
+    .responsiveNav li:not(:first-child){
+        display: none;
+    }
+
+    .responsiveNav.responsive {
+        position: relative;
+    }
+
+    .responsiveNav.responsive li {
+        float: none;
+        display: block;
+        margin: 0;
+        padding: 5px;
+    }
+
+    .responsiveNav.responsive ul {
+        float: left;
+        width: 100%;
+    }
+
+    #logo {
+        display: none;
+    }
+
+    .responsiveNav.responsive #menuIcon {
+         position: absolute;
+         right: 0;
+         top: 0;
+    }
+}
