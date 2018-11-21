@@ -51,6 +51,7 @@ a:hover{
     color: white;
 }
 
+h4,
 h5,
 h6 {
     font-size: 120%;
@@ -83,7 +84,7 @@ h6 {
 }
 
 .message {
-    font-size: 120%;
+    font-size: 130%;
     display: grid;
     grid-template-columns: 15% 1fr 1fr 1fr 15%;
     grid-template-rows: 1fr;
@@ -179,7 +180,11 @@ p {
     grid-template-rows: 1fr;
     grid-template-areas: ". footer-right footer-center footer-left .";
     text-align: center;
-    color: #020303;
+    color: white;
+    font-size: 115%;
+    background-color: #010203;
+    opacity: 0.8;
+    padding-top: 5px;
 }
 
 .footer-right {
