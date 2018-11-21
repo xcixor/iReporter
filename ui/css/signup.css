@@ -22,7 +22,7 @@ body {
 
 .main-content {
     grid-area: main-content;
-    margin-top: 200px;
+    margin-top: 100px;
     border: solid 0.05em;
     border-color: #E8E8E8;
     display: grid;
