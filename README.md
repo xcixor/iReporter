@@ -1,1 +1,0 @@
-#### This application will enable users to report incidents of public concers such as corruption, in order for action to be taken and the solution remedied.
