@@ -1,0 +1,156 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-image: url("/ui/images/whistle.jpg");
+    background-size: cover;
+    opacity: 0.9;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.container {
+    flex: 1;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 30% 40% 30%;
+    grid-template-rows: 1fr;
+    grid-template-areas: "sidenav history ."
+}
+
+.sidenav {
+    grid-area: sidenav;
+    display: flex;
+    align-items: center;
+}
+
+ul {
+    list-style-type: none;
+    float: right;
+    /* margin-top: 50%; */
+    width: 50%;
+    background-color: #010203;
+    margin-left: 25%;
+
+}
+li {
+    margin-bottom: 50px;
+    display: block;
+    padding: 20px 5px;
+
+}
+a {
+    text-decoration: none;
+    color: white;
+    font-size: 120%;
+}
+
+li a:hover{
+    color: black;
+}
+
+li:hover{
+    background-color: whitesmoke;
+}
+
+li:hover a{
+    color: black;
+
+}
+
+.history {
+    grid-area: history;
+}
+
+.heading {
+    margin-top: 200px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background-color: #010203;
+    opacity: 0.8;
+    padding: 10px 0 10px 0;
+}
+
+.fas {
+    margin-right: 20px;
+    color: red;
+}
+
+.heading h2 {
+    color: white;
+}
+
+.fab {
+    cursor: pointer;
+    width: 70px;
+    height: 70px;
+    background-color: #282B2D;
+    border-radius: 50%;
+    box-shadow: 0 6px 10px 0 #666;
+    transition: all 0.1s ease-in-out;
+
+    font-size: 50px;
+    color: white;
+    text-align: center;
+    line-height: 70px;
+
+    position: fixed;
+    right: 30%;
+    bottom: 50px;
+}
+
+.fab:hover {
+    box-shadow: 0 6px 14px 0 #666;
+    transform: scale(1.05);
+}
+.content-row {
+    margin-bottom: 20px;
+}
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border-radius: 5px;
+    padding: 10px;
+    color: white;
+    background-color: #010203;
+    opacity: 0.8;
+}
+
+.history .heading {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    display: flex;
+    height: 40px;
+    border-bottom: solid 0.05em;
+    border-color: #E0E0E0;
+    line-height: 40px;
+}
+
+.card-title .type {
+    flex: 1;
+}
+
+.card-title .date {
+    flex: 1;
+}
+
+.btn {
+    background-color: #282B2D;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+    font-size: 120%;
+}
