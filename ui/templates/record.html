@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/record.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+        crossorigin="anonymous">
+    <title>iReport</title>
+</head>
+<body>
+    <div class="main-content">
+        <div class="navbar">
+            <div class="responsiveNav" id="topNav">
+                <ul>
+                    <li id="menuIcon"><i class="fas fa-bars"></i></li>
+                    <li>Are you with us? <a href="ui/templates/signup.html">signup</a></li>
+                    <li><a href="ui/templates/login.html">login</a></li>
+                    <li id="logo">iReporter</li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="center-content">
+                <div class="record">
+                    <div class="record-heading">
+                        <i class="fas fa-chart-bar fa-2x"></i>
+                        <h2>Create an Incident</h1>
+                    </div>
+                        <form action="#">
+                            <div class="input-row">
+                                <div class="select-box">
+                                    <select name="type" id="type">
+                                        <option value="0">Select record type:</option>
+                                        <option value="1">Red Flag</option>
+                                        <option value="2">Intervention</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="input-row">
+                                <textarea rows="15" cols="50" placeholder="Tell us what happened...">
+                                </textarea>
+                            </div>
+                            <!-- <div class="input-row">
+                                <div class="long">
+                                    <input type="text" placeholder="Longitude" name="long" required>
+                                </div>
+                                <div class="lat">
+                                    <input type="text" placeholder="Latitude" name="lat" required>
+                                </div>
+                            </div> -->
+                            <div class="input-row" id="map">
+                                <p>Click the button below to use your location as the incident's location</p>
+                                <button type="submit" class="btn" id="mapBtn">Use My Location</button>
+                                <div id="mapArea"></div>
+                            </div>
+                            <div class="input-row">
+                                <label for="">Add image</label>
+                                <input type="file" name="pic" accept="image/*">
+                            </div>
+                            <div class="input-row">
+                                <label for="">Add Video</label>
+                                <input type="file" name="pic" accept="video/*">
+                            </div>
+                            <div class="input-row">
+                                <button type="submit" class="btn" id="save">Save</button>
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="footer-right"><span>&copy;</span>pndungu@gmail.com</div>
+            <footer class="footer-center">
+                <p id="time">time</p>
+            </footer>
+            <div class="footer-left">iReport</div>
+        </div>
+    </div>
+<script src="../js/index.js"></script>
+<script src="../js/map.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2SHXbYQmmCGPCurFIrtl7-io0mOTsX3k&callback=initMap">
+</script>
+</body>
+</html>
