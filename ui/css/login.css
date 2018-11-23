@@ -1,17 +1,7 @@
-body {
-    background-color: #E4F7FD;
-
-}
-
 .main-container {
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-image: url("/ui/images/whistle.jpg");
-    background-size: cover;
-    opacity: 0.9;
-    background-position: center;
-    background-repeat: no-repeat;
 }
 
 .container {

@@ -63,11 +63,6 @@ h6 {
 .main-content {
     flex: 1;
     height: 800px;
-    background-image: url("/ui/images/whistle.jpg");
-    background-size: cover;
-    opacity: 0.9;
-    background-position: center;
-    background-repeat: no-repeat;
     color: white;
     display: flex;
     flex-direction: column;
