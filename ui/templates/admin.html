@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <title>iReporter</title>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="navbar">
+            <div class="responsiveNav" id="topNav">
+                <ul>
+                    <li id="menuIcon"><i class="fas fa-bars"></i></li>
+                    <li><a href="../../index.html">logout</a></li>
+                    <li id="logo">iReporter</li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="history">
+                <div class="heading">
+                    <i class="fas fa-user-cog fa-2x"></i>
+                    <h2>Admin Dashboard</h2>
+                </div>
+                <div class="content">
+                <div class="tab">
+                    <button class="tablinks" onclick="openCity(event, 'interventions')" id="default">Interventions</button>
+                    <button class="tablinks" onclick="openCity(event, 'Red Flags')">Red Flags</button>
+                </div>
+                <div id="interventions" class="tabcontent">
+                    <div class="content-row">
+                        <div class="card">
+                            <div class="card-title">
+                                <div class="type"><i>Report by Asha</i></div>
+                                <div class="date">
+                                    <p><i>25/8/2018</i></p>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Quisque velit
+                                nisi, pretium ut lacinia in,
+                                elementum id enim. Pellentesque in ipsum id orci porta dapibus. Quisque velit nisi,
+                                pretium ut lacinia in, elementum id
+                                enim.
+                            </div>
+                            <div class="card-action">
+                                <button class="btn">view more</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-row">
+                        <div class="card">
+                            <div class="card-title">
+                                <div class="type"><i>Report by xcixor</i></div>
+                                <div class="date">
+                                    <p><i>26/8/2018</i></p>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Quisque velit
+                                nisi, pretium ut
+                                lacinia in,
+                                elementum id enim. Pellentesque in ipsum id orci porta dapibus. Quisque velit nisi,
+                                pretium ut lacinia in,
+                                elementum id
+                                enim.
+                            </div>
+                            <div class="card-action">
+                                <button class="btn">view more</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Red Flags" class="tabcontent">
+                    <div class="content-row">
+                        <div class="card">
+                            <div class="card-title">
+                                <div class="type"><i>Report by Kamano</i></div>
+                                <div class="date">
+                                    <p><i>26/8/2018</i></p>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Quisque velit
+                                nisi, pretium ut
+                                lacinia in,
+                                elementum id enim. Pellentesque in ipsum id orci porta dapibus. Quisque velit nisi,
+                                pretium ut lacinia in,
+                                elementum id
+                                enim.
+                            </div>
+                            <div class="card-action">
+                                <button class="btn">view more</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="footer-right"><span>&copy;</span>pndungu@gmail.com</div>
+            <footer class="footer-center">
+                <p id="time">time</p>
+            </footer>
+            <div class="footer-left">iReport</div>
+        </div>
+    </div>
+    <script src="../js/index.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+</html>
