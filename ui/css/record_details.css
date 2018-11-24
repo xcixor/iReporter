@@ -10,7 +10,7 @@
     border-top: solid 0.05em;
     border-color: #E8E8E8;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 40% 1fr;
     grid-template-rows: auto;
     grid-template-areas: ". center-content .";
 }
