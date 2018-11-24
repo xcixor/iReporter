@@ -16,37 +16,6 @@
     line-height: 50px;
 }
 
-/* ul {
-    height: auto;
-    font-size: 120%;
-}
-
-ul {
-    list-style-type: none;
-    margin: 0;
-    float: right;
-    overflow: hidden;
-    background-color: whitesmoke;
-}
-
-ul li {
-    float: left;
-    display: block;
-    padding: 20px 5px;
-}
-
-li:hover{
-    background: whitesmoke;
-}
-
-a{
-    text-decoration: none;
-    color: #468847;
-}
-a:hover{
-    color: blue;
-} */
-
 #logo {
     background: black;
     color: white;
