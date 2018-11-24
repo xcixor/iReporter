@@ -1,0 +1,50 @@
+#mapArea {
+    height: 400px;
+    width: 100%;
+}
+
+.scrollable {
+    padding: 10px;
+    overflow-x: scroll;
+}
+
+.no-opacity {
+    background:rgba(0, 0, 0, 0);
+}
+
+.input-row {
+    align-items: left;
+    justify-content: left;
+}
+
+.input-row p {
+    text-align: justify;
+}
+
+.radio {
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+.radio p{
+    padding-right: 20px;
+}
+
+.heading {
+    text-align: left;
+    margin: 20px;
+
+}
+
+.img {
+    height: 400px;
+    width: auto;
+    margin: 4px;
+    border-radius: 4px;
+}
+
+input[type=radio] {
+    border: 0px;
+    width: 100%;
+    height: 2em;
+}

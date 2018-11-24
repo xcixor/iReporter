@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/record_details.css">
+    <link rel="stylesheet" href="../css/status.css">
+    <title>iReporter</title>
+</head>
+
+<body>
+    <div class="main-content">
+        <div class="navbar">
+            <div class="responsiveNav" id="topNav">
+                <ul>
+                    <li id="menuIcon"><i class="fas fa-bars"></i></li>
+                    <li>Are you with us? <a href="ui/templates/signup.html">signup</a></li>
+                    <li><a href="ui/templates/login.html">login</a></li>
+                    <li id="logo">iReporter</li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="center-content">
+                <div class="record card">
+                    <form action="#">
+                        <div class="input-row">
+                            <p>Record Type: Incident Report</p>
+                        </div>
+                        <div class="input-row">
+                            <p>Title: Maternity Discrimination</p>
+                        </div>
+                        <div class="heading"><label>Description:</label></div>
+                        <div class="input-row">
+                        <p>Women of a certain tribe are not treated in this hospital. This matter has been going on for several months now.
+                            Something very seriousl needs to be done. Our women are in jeopardy</p>
+                        </div>
+                        <div class="heading"><label>Location:</label></div>
+                        <div class="input-row" id="map">
+                            <div id="mapArea"></div>
+                        </div>
+
+                        <div class="heading"><label>Videos:</label></div>
+                        <div class="input-row scrollable">
+                            <video width="400px" height="100%" controls>
+                                <source src="../videos/vid1.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <video width="400px" height="100%" controls>
+                                <source src="../videos/vid1.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <video width="400px" height="100%" controls>
+                                <source src="../videos/vid1.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <video width="400px" height="100%" controls>
+                                <source src="../videos/vid1.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="heading"><label>Images:</label></div>
+                            <div class="input-row scrollable no-opacity">
+                            <img src="../images/comp2.jpeg" alt="comp2" class="img">
+                            <img src="../images/comp4.jpeg" alt="comp4" class="img">
+                            <img src="../images/whistle.jpg" alt="whistle" class="img">
+                        </div>
+                        <div class="top-heading"><label>Set Status For this Record</label></div>
+                        <div class="input-row" id="action">
+                            <div class="radio">
+                                <p>Accept</p>
+                                <input type="radio" name="status" class="control">
+                            </div>
+                            <div class="radio">
+                                <p>Reject</p>
+                                <input type="radio" name="status">
+                            </div>
+                            <div class="radio">
+                                <p>Pending</p>
+                                <input type="radio" name="status">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="footer-right"><span>&copy;</span>pndungu@gmail.com</div>
+            <footer class="footer-center">
+                <p id="time">time</p>
+            </footer>
+            <div class="footer-left">iReport</div>
+        </div>
+    </div>
+    <script src="../js/index.js"></script>
+    <script src="../js/map.js"></script>
+    <script src="../js/record_details.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2SHXbYQmmCGPCurFIrtl7-io0mOTsX3k&callback=initMap">
+    </script>
+</body>
+
+</html>
