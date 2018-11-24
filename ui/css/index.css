@@ -16,37 +16,6 @@
     line-height: 50px;
 }
 
-/* ul {
-    height: auto;
-    font-size: 120%;
-}
-
-ul {
-    list-style-type: none;
-    margin: 0;
-    float: right;
-    overflow: hidden;
-    background-color: whitesmoke;
-}
-
-ul li {
-    float: left;
-    display: block;
-    padding: 20px 5px;
-}
-
-li:hover{
-    background: whitesmoke;
-}
-
-a{
-    text-decoration: none;
-    color: #468847;
-}
-a:hover{
-    color: blue;
-} */
-
 #logo {
     background: black;
     color: white;
@@ -200,7 +169,6 @@ p {
 @media screen and (max-width: 600px) {
     .main-content {
         opacity: 1;
-        background-color: red;
     }
     .top-bar {
         display: none;
@@ -263,5 +231,10 @@ p {
          position: absolute;
          right: 0;
          top: 0;
+    }
+    .footer {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-areas: "footer-left""footer-center""footer-right ";
     }
 }
