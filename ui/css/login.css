@@ -10,10 +10,9 @@
     grid-template-rows: auto;
     grid-template-areas: ". main-content .";
     flex: 1 0 auto;
-}
-
-a {
-    text-decoration: none;
+    border-top: solid 0.05em;
+    border-color: #E8E8E8;
+    color: white;
 }
 
 .main-content {
@@ -29,7 +28,7 @@ a {
 
 .center-content {
     text-align: center;
-    background-color: #3575B4;
+    background-color: #010203;
     opacity: 0.9;
     grid-area: center-content;
     margin: 50px 0 50px 0;
@@ -68,9 +67,12 @@ h2:after {
     justify-content: center;
 }
 
+.fas {
+    color: white;
+}
+
 .input-row .fas {
     margin-right: 5px;
-    color: #282B2D;
     width: 10%;
 }
 
@@ -97,6 +99,7 @@ input[type=password]:focus {
     cursor: pointer;
     width: 100%;
     opacity: 0.9;
+    font-size: 105%;
 }
 
 .fa-user-circle {

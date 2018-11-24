@@ -8,18 +8,22 @@
         crossorigin="anonymous">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/user-dashboard.css">
+    <link rel="stylesheet" href="../css/nav.css">
     <title>iReporter</title>
 </head>
 <body>
     <div class="main-container">
-        <div class="container">
-            <div class="sidenav">
+        <div class="navbar">
+            <div class="responsiveNav" id="topNav">
                 <ul>
+                    <li id="menuIcon"><i class="fas fa-bars"></i></li>
                     <li><a href="user-profile.html">My Profile</a></li>
-                    <li><a href="#">action 2</a></li>
-                    <li><a href="#">action 3</a></li>
+                    <li><a href="../../index.html">Log Out</a></li>
+                    <li id="logo">iReporter</li>
                 </ul>
             </div>
+        </div>
+        <div class="container">
             <div class="history">
                 <div class="heading">
                     <i class="fas fa-history fa-2x"></i>
@@ -38,7 +42,9 @@
                                 enim.
                             </div>
                             <div class="card-action">
-                                <button class="btn">view more</button>
+                                <a href="record_details.html">
+                                    <button class="btn">view more</button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -58,7 +64,9 @@
                                 enim.
                             </div>
                             <div class="card-action">
-                                <button class="btn">view more</button>
+                                <a href="record_details.html">
+                                    <button class="btn">view more</button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -78,15 +86,14 @@
                                 enim.
                             </div>
                             <div class="card-action">
-                                <button class="btn">view more</button>
+                                <a href="record_details.html">
+                                    <button class="btn">view more</button>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <a href="record.html">
-            <div class="fab" title="create an incident report"> + </div>
-            </a>
         </div>
         <div class="footer">
             <div class="footer-right"><span>&copy;</span>pndungu@gmail.com</div>
@@ -94,6 +101,11 @@
                 <p id="time">time</p>
             </footer>
             <div class="footer-left">iReport</div>
+        </div>
+        <div>
+            <a href="record.html">
+                <div class="fab" title="create an incident report"> + </div>
+            </a>
         </div>
     </div>
 <script src="../js/index.js"></script>
