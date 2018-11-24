@@ -12,47 +12,7 @@
     display: grid;
     grid-template-columns: 30% 40% 30%;
     grid-template-rows: 1fr;
-    grid-template-areas: "sidenav history ."
-}
-
-.sidenav {
-    grid-area: sidenav;
-    display: flex;
-    align-items: center;
-}
-
-ul {
-    list-style-type: none;
-    float: right;
-    /* margin-top: 50%; */
-    width: 50%;
-    background-color: #010203;
-    margin-left: 25%;
-
-}
-li {
-    margin-bottom: 50px;
-    display: block;
-    padding: 20px 5px;
-
-}
-a {
-    text-decoration: none;
-    color: white;
-    font-size: 120%;
-}
-
-li a:hover{
-    color: black;
-}
-
-li:hover{
-    background-color: whitesmoke;
-}
-
-li:hover a{
-    color: black;
-
+    grid-template-areas: ". history ."
 }
 
 .history {
@@ -60,7 +20,7 @@ li:hover a{
 }
 
 .heading {
-    margin-top: 200px;
+    margin-top: 50px;
     display: flex;
     text-align: center;
     align-items: center;
@@ -187,4 +147,23 @@ li:hover a{
 
 .footer-center {
     grid-area: footer-center;
+}
+
+@media screen and (max-width: 600px) {
+    .container {
+        margin-top: 0;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-template-areas: "history";
+    }
+
+    .footer {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-areas: "footer-left""footer-center""footer-right ";
+    }
+    .fab {
+        bottom: 0;
+        right: 0;
+    }
 }
