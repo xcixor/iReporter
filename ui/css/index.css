@@ -169,7 +169,6 @@ p {
 @media screen and (max-width: 600px) {
     .main-content {
         opacity: 1;
-        background-color: red;
     }
     .top-bar {
         display: none;
@@ -232,5 +231,10 @@ p {
          position: absolute;
          right: 0;
          top: 0;
+    }
+    .footer {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-areas: "footer-left""footer-center""footer-right ";
     }
 }
