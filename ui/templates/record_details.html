@@ -7,13 +7,11 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
         crossorigin="anonymous">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/nav.css">
-    <link rel="stylesheet" href="../css/footer.css">
     <link rel="stylesheet" href="../css/record_details.css">
     <title>iReporter</title>
 </head>
 <body>
-<div class="main-content">
+<div class="main-container">
     <div class="navbar">
         <div class="responsiveNav" id="topNav">
             <ul>
@@ -25,42 +23,50 @@
         </div>
     </div>
     <div class="container">
-        <div class="center-content">
-            <div class="record card">
-                <form action="#">
-                    <div class="input-row">
-                        <label for="">Record Type:</label>
-                        <input type="text" id="type" value="Incident Report">
-                    </div>
-                    <div class="input-row">
-                        <label for="">Title:</label>
-                        <input type="text" id="type" value="Maternity Discrimination">
-                    </div>
-                    <div class="input-row">
-                        <label for="">Status:</label>
-                        <input type="text" id="type" value="In progress">
-                    </div>
-                    <div class="top-heading"><label>Description</label></div>
-                    <div class="input-row">
-                        <textarea name="" id="description" cols="20" rows="10"></textarea>
-                    </div>
-                    <div class="input-row" id="map">
-                    <button type="submit" class="btn" id="mapBtn">Change Location</button>
-                        <div id="mapArea"></div>
-                    </div>
-                    <div class="input-row" id="action">
-                            <div class="btn" id="delete">
-                                <form action="#">
-                                    <i class="fas fa-trash" title="Delete this record"></i>
-                                </form>
+        <div class="main-content">
+            <div class="center-content">
+                <div class="record">
+                    <div class="card">
+                        <div class="heading">
+                            <i class="fas fa-chart-bar fa-2x"></i>
+                            <h2>Manage Record</h2>
+                        </div>
+                        <form action="#">
+                            <div class="input-row">
+                                <label for="">Record Type:</label>
+                                <input type="text" id="type" value="Incident Report">
                             </div>
-                            <div class="btn" id="edit">
-                                <form action="#">
-                                    <i class="fas fa-edit" title="Edit this record"></i>
-                                </form>
+                            <div class="input-row">
+                                <label for="">Title:</label>
+                                <input type="text" id="type" value="Maternity Discrimination">
                             </div>
+                            <div class="input-row">
+                                <label for="">Status:</label>
+                                <input type="text" id="type" value="In progress">
+                            </div>
+                            <div class="top-heading"><label>Description</label></div>
+                            <div class="input-row">
+                                <textarea name="" id="description" cols="20" rows="10"></textarea>
+                            </div>
+                            <div class="input-row" id="map">
+                            <button type="submit" class="btn" id="mapBtn">Change Location</button>
+                                <div id="mapArea"></div>
+                            </div>
+                            <div class="input-row" id="action">
+                                    <div class="btn" id="delete">
+                                        <form action="#">
+                                            <i class="fas fa-trash" title="Delete this record"></i>
+                                        </form>
+                                    </div>
+                                    <div class="btn" id="edit">
+                                        <form action="#">
+                                            <i class="fas fa-edit" title="Edit this record"></i>
+                                        </form>
+                                    </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
