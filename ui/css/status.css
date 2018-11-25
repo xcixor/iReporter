@@ -3,6 +3,38 @@
     width: 100%;
 }
 
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    padding: 10px;
+    background-color: #010203;
+    opacity: 0.8;
+    font-size: 120%;
+    width: 60%;
+}
+
+.center-content {
+     display: grid;
+     grid-template-columns: 1fr 80% 1fr;
+     grid-template-rows: 1fr;
+     grid-template-areas: ". record .";
+}
+
+.record {
+    grid-area: record;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.input-row {
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .scrollable {
     padding: 10px;
     overflow-x: scroll;
@@ -37,8 +69,8 @@
 }
 
 .img {
-    height: 400px;
-    width: auto;
+    width: 100%;
+    height: auto;
     margin: 4px;
     border-radius: 4px;
 }
@@ -47,4 +79,22 @@ input[type=radio] {
     border: 0px;
     width: 100%;
     height: 2em;
+}
+
+@media screen and (max-width: 600px) {
+    .card {
+        width: 100%;
+    }
+    .center-content {
+        border-radius: 0px;
+        margin: 0;
+    }
+    .center-content {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        grid-template-areas: "record";
+    }
+    body {
+        overflow-x: hidden;
+    }
 }

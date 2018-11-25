@@ -1,21 +1,3 @@
-.main-content {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.container {
-    flex: 1;
-    grid-area: main-content;
-    border-top: solid 0.05em;
-    border-color: #E8E8E8;
-    display: grid;
-    grid-template-columns: 1fr 40% 1fr;
-    grid-template-rows: auto;
-    grid-template-areas: ". center-content .";
-}
-
-
 #map {
     flex-direction: column;
 }
@@ -23,24 +5,20 @@
 #save {
     background: green;
 }
-
-.center-content {
-    text-align: center;
-    grid-area: center-content;
-    margin: 50px 0 50px 0;
-    border-radius: 10px;
-    font-size: 125%;
+.record {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     border-radius: 5px;
     padding: 10px;
-    color: white;
     background-color: #010203;
     opacity: 0.8;
     font-size: 115%;
+    width: 60%;
 }
 
 .input-row {
@@ -55,32 +33,14 @@
     width: 100%;
 }
 
+.fas {
+    color: red;
+}
+
 .btn {
-    background-color: green;
-    color: white;
-    padding: 16px 20px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    opacity: 1;
-    font-size: 105%;
+    text-align: center;
 }
 
-input[type=text],
-input[type=file],
-input[type=password] {
-    flex-grow: 100;
-    padding: 15px 0 15px 10px;
-    border: none;
-    background: #f1f1f1;
-    border-radius: 5px;
-}
-
-input[type=text]:focus,
-input[type=password]:focus {
-    background-color: white;
-    outline: none;
-}
 
 .select-box {
     width: 100%;
@@ -127,21 +87,12 @@ label {
 }
 
 @media screen and (max-width: 600px) {
-    .container {
-        margin-top: 0;
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        grid-template-areas: "center-content";
+    .card {
+        width: 100%;
     }
 
     .center-content {
         border-radius: 0px;
         margin: 0;
-    }
-
-    .footer {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
-        grid-template-areas: "footer-left""footer-center""footer-right ";
     }
 }

@@ -1,26 +1,15 @@
-.main-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.container {
-    flex: 1;
-}
-
-.container {
-    display: grid;
-    grid-template-columns: 30% 40% 30%;
-    grid-template-rows: 1fr;
-    grid-template-areas: ". history ."
+.center-content {
+     display: flex;
+     align-content: center;
+     justify-content: center;
 }
 
 .history {
     grid-area: history;
+    width: 60%;
 }
 
 .heading {
-    margin-top: 50px;
     display: flex;
     text-align: center;
     align-items: center;
@@ -32,7 +21,7 @@
 
 .fas {
     margin-right: 20px;
-    color: red;
+    color: red !important;
 }
 
 .heading h2 {
@@ -54,8 +43,8 @@
     line-height: 70px;
 
     position: fixed;
-    right: 30%;
-    bottom: 50px;
+    right: 29%;
+    bottom: 150px;
 }
 
 .fab:hover {
@@ -105,65 +94,12 @@
     line-height: 1.6em;
 }
 
-.btn {
-    background-color: #282B2D;
-    color: white;
-    padding: 16px 20px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    opacity: 0.9;
-    font-size: 120%;
-}
-
-.footer {
-    flex-shrink: 0;
-    text-align: center;
-    background-color: #010203;
-    opacity: 0.8;
-    color: white;
-    padding-top: 5px;
-    border-top: solid 0.05em;
-    border-color: #E8E8E8;
-    height: 50px;
-    display: grid;
-    grid-template-columns: 15% 1fr 1fr 1fr 15%;
-    grid-template-rows: 1fr;
-    grid-template-areas: ". footer-left footer-center footer-right .";
-}
-
-.footer-content {
-    grid-area: footer-content;
-    background-color: whitesmoke;
-}
-
-.footer-right {
-    grid-area: footer-right;
-}
-
-.footer-left {
-    grid-area: footer-left;
-}
-
-.footer-center {
-    grid-area: footer-center;
-}
-
 @media screen and (max-width: 600px) {
-    .container {
-        margin-top: 0;
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        grid-template-areas: "history";
-    }
-
-    .footer {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
-        grid-template-areas: "footer-left""footer-center""footer-right ";
-    }
     .fab {
         bottom: 0;
         right: 0;
+    }
+    .history {
+        width: 100%;
     }
 }
