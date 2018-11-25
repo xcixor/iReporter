@@ -37,6 +37,10 @@ h6 {
     grid-template-areas: "left-message center-message right-message";
 }
 
+.message .fas {
+    color: #79004D;
+}
+
 .left-message {
     grid-area: left-message;
     text-align: center;
@@ -94,6 +98,10 @@ h6 {
     flex-direction: column;
     padding: 20px;
     align-items: center;
+}
+
+.stat-content .stat .fas {
+    color: #FF7A00;
 }
 
 .stat i,
