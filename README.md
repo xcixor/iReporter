@@ -28,9 +28,21 @@ iReporter is an a whistle blowing application that enables people to raise conce
 ## Step 5 Test
 - To tes the app run the command below
 - - py.test
+### Endpoints
+|Resource urls                                    | Method     | Description               |
+|-------------------------------------------------|------------|---------------------------|
+| /api/v1/incident                                |   POST     | Create an Incident        |
+| /api/v1/incident                                |   GET      | Get all incidences        |
+##### This are enough to get you started
 ## Contrbuting
 My friends at Andela35
 ## Licenses
 None
+
+## Hosting
+The app is hosted at [heroku](https://i-reporter.herokuapp.com/)
+
+## Documentation
+The documentation can be found [here](https://ireporter.docs.apiary.io/)
 
 The Front end is hosted [here](https://xcixor.github.io/iReporter/)

@@ -30,9 +30,9 @@ class Incident(Resource):
         if res['status']:
             return {'status': 201, 'data': res['message']}, 201
         incident_validation_errors = res['message']['errors'].copy()
-        self.incident.errors.clear()
+        incident.errors.clear()
         return {'status': 400, 'errors': incident_validation_errors}, 400
 
     def get(self):
         """Return all created incidents."""
-        return {'status': 201, 'data': self.db}, 201
+        return {'status': 200, 'data': self.db}, 200
