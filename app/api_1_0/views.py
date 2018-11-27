@@ -11,22 +11,22 @@ class Incident(Resource):
 
     def __init__(self):
         """Initialize the parameters of an incident."""
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument('Created By')
-        self.parser.add_argument('Type')
-        self.parser.add_argument('Location')
-        self.parser.add_argument('Images', type=str)
-        self.parser.add_argument('Video', type=str)
-        self.parser.add_argument('Comment')
-        self.args = self.parser.parse_args()
         self.db = db
-        self.incident = IncidentModel(
-            self.args['Created By'], self.args['Type'], self.args['Location'],
-            self.args['Comment'])
 
     def post(self):
         """Send incident creation request."""
-        res = self.incident.save(db)
+        parser = reqparse.RequestParser()
+        parser.add_argument('Created By')
+        parser.add_argument('Type')
+        parser.add_argument('Location')
+        parser.add_argument('Images', type=str)
+        parser.add_argument('Video', type=str)
+        parser.add_argument('Comment')
+        args = parser.parse_args()
+        incident = IncidentModel(
+            args['Created By'], args['Type'], args['Location'],
+            args['Comment'])
+        res = incident.save(db)
         if res['status']:
             return {'status': 201, 'data': res['message']}, 201
         incident_validation_errors = res['message']['errors'].copy()
