@@ -36,3 +36,7 @@ class Incident(Resource):
     def get(self):
         """Return all created incidents."""
         return {'status': 200, 'data': self.db}, 200
+
+    def get (self, incident_id):
+        """Get a specefic incident."""
+        pass
