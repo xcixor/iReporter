@@ -19,13 +19,12 @@ class TestRecord(unittest.TestCase):
         }
         self.app = create_app('testing')
         self.client = self.app.test_client
-        self.app_context = self.app.app_context()
-        self.app_context.push()
+        # self.app_context = self.app.app_context()
+        # self.app_context.push()
 
     def tearDown(self):
         """Remove instance variables."""
         del self.incident
-        self.app_context.pop()
 
     def test_create_incident_with_valid_data_true(self):
         """Test an incident can be created successfuly."""
@@ -33,7 +32,8 @@ class TestRecord(unittest.TestCase):
         self.assertEqual(res.status_code, 201)
         res = res.get_json()
         self.assertEqual(res['data']['message'],
-                         'Successfuly created incident')
+                        'Successfuly created incident')
+
 
     def test_incident_with_one_coordinate_false(self):
         """Test coordinate should have longitude and latitude."""
@@ -160,11 +160,12 @@ class TestRecord(unittest.TestCase):
         result = self.client().get('/api/v1/incidents/1')
         self.assertEqual(result.status_code, 200)
         result = result.get_json()
-        self.assertDictContainsSubset(result['data'][0], self.incident)
+        self.assertDictContainsSubset(self.incident, result['data'])
 
     def test_get_non_existing_incident_false(self):
         """Test cannot get non existing incident."""
-        res = self.client().get('/api/v1/incidents/1')
+        res = self.client().get('/api/v1/incidents/5')
+        print(res.get_json())
         self.assertEqual(res.status_code, 404)
         res = res.get_json()
-        self.assertEqual(res['errors'][0], "That resources cannot be found")
+        self.assertEqual(res['error'], "That resource cannot be found")

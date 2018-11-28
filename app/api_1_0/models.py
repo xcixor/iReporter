@@ -135,9 +135,9 @@ class IncidentModel(object):
         """
         return {
             'Id': self.id,
-            'Owner': self.created_by,
+            'Created By': int(self.created_by),
             'Date Created': str(self.created_on),
-            'Incident Type': self.incident_type,
+            'Type': self.incident_type,
             'Location': self.location,
             'Status': self.status,
             'Comment': self.comment,

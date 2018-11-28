@@ -10,7 +10,7 @@ class Incident(Resource):
     """Implements an Incident's endpoints."""
 
     def __init__(self):
-        """Initialize the parameters of an incident."""
+        """Initialize db."""
         self.db = db
 
     def post(self):
@@ -33,10 +33,30 @@ class Incident(Resource):
         incident.errors.clear()
         return {'status': 400, 'errors': incident_validation_errors}, 400
 
-    def get(self):
-        """Return all created incidents."""
-        return {'status': 200, 'data': self.db}, 200
 
-    def get (self, incident_id):
+class IncidentManipulation(Resource):
+    """Manage incidents."""
+
+    def __init__(self):
+        """Initialize db."""
+        self.db = db
+
+    def find_incident(self, incident_id):
+        """Find and incident in db."""
+        for value in self.db:
+            for key, value in value.items():
+                if str(key) == str(incident_id):
+                    return value
+
+    def get(self, incident_id):
         """Get a specefic incident."""
-        pass
+        # incident = None
+        # for value in self.db:
+        #     for key, value in value.items():
+        #         if str(key) == str(incident_id):
+        #             incident = value
+        incident = self.find_incident(incident_id)
+        if isinstance(incident, dict):
+            return {'status': 200, 'data': incident}, 200
+        else:
+            return {'status': 404, 'error': 'That resource cannot be found'}, 404
