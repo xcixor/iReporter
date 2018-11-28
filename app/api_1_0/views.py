@@ -35,7 +35,7 @@ class Incident(Resource):
 
     def get(self):
         """Return all created incidents."""
-        if len(self.db) !=0:
+        if len(self.db) != 0:
             return {'status': 200, 'data': self.db}, 200
         else:
             return {'data': "There are no incidences at the moment",
@@ -63,3 +63,36 @@ class IncidentManipulation(Resource):
             return {'status': 200, 'data': incident}, 200
         else:
             return {'status': 404, 'error': 'That resource cannot be found'}, 404
+
+    def put(self, incident_id):
+        """Edit an incidence."""
+        parser = reqparse.RequestParser()
+        parser.add_argument('Created By')
+        parser.add_argument('Type')
+        parser.add_argument('Location')
+        parser.add_argument('Images', type=str)
+        parser.add_argument('Video', type=str)
+        parser.add_argument('Comment')
+        args = parser.parse_args()
+        new_incident = {}
+
+        if args['Created By']:
+            new_incident['Created By'] = int(args['Created By'])
+
+        if args['Type']:
+            new_incident['Type'] = args['Type']
+
+        if args['Location']:
+            new_incident['Location'] = args['Location']
+
+        if args['Comment']:
+            new_incident['Comment'] = args['Comment']
+
+        incident = self.find_incident(incident_id)
+        if isinstance(incident, dict):
+            for value in self.db:
+                for key, value in value.items():
+                    if str(key) == str(incident_id):
+                        value.update(new_incident)
+                        return {'status': 201, 'data': value}, 201
+        return {'status': 404, 'error': 'That resource cannot be found'}, 404
