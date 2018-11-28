@@ -51,8 +51,8 @@ class IncidentManipulation(Resource):
 
     def find_incident(self, incident_id):
         """Find and incident in db."""
-        for value in self.db:
-            for key, value in value.items():
+        for incident in self.db:
+            for key, value in incident.items():
                 if str(key) == str(incident_id):
                     return value
 
@@ -96,3 +96,16 @@ class IncidentManipulation(Resource):
                         value.update(new_incident)
                         return {'status': 201, 'data': value}, 201
         return {'status': 404, 'error': 'That resource cannot be found'}, 404
+
+    def delete(self, incident_id):
+        """Delete an incident."""
+        incident = self.find_incident(incident_id)
+
+        for incident in self.db:
+            for key, value in incident.items():
+                if str(key) == str(incident_id):
+                    self.db.remove(incident)
+                    return {'status': 200,
+                    'data': "Incident successfuly deleted"}, 200
+        return {'status': 404, 'error':
+                'That resource cannot be found'}, 404

@@ -227,13 +227,16 @@ class TestRecord(unittest.TestCase):
         res = self.client().post('/api/v1/incidents', data=self.incident)
         self.assertEqual(res.status_code, 201)
         result = self.client().delete('/api/v1/incidents/1')
+        print(result, '******')
         self.assertEqual(result.status_code, 200)
+        result = result.get_json()
         self.assertEqual(
-            res['data'], "Incident successfuly deleted")
+            result['data'], "Incident successfuly deleted")
 
     def test_delete_non_existing_incident_false(self):
         """Test user can delete an incident successfuly."""
         result = self.client().delete('/api/v1/incidents/1')
         self.assertEqual(result.status_code, 404)
+        result = result.get_json()
         self.assertEqual(
-            result['data'], "That resource cannot be found")
+            result['error'], "That resource cannot be found")
