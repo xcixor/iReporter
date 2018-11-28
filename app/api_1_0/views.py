@@ -50,11 +50,6 @@ class IncidentManipulation(Resource):
 
     def get(self, incident_id):
         """Get a specefic incident."""
-        # incident = None
-        # for value in self.db:
-        #     for key, value in value.items():
-        #         if str(key) == str(incident_id):
-        #             incident = value
         incident = self.find_incident(incident_id)
         if isinstance(incident, dict):
             return {'status': 200, 'data': incident}, 200
