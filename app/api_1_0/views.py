@@ -33,6 +33,14 @@ class Incident(Resource):
         incident.errors.clear()
         return {'status': 400, 'errors': incident_validation_errors}, 400
 
+    def get(self):
+        """Return all created incidents."""
+        if len(self.db) !=0:
+            return {'status': 200, 'data': self.db}, 200
+        else:
+            return {'data': "There are no incidences at the moment",
+                    'status': 404}, 404
+
 
 class IncidentManipulation(Resource):
     """Manage incidents."""

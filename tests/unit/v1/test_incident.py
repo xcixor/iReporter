@@ -5,6 +5,8 @@ import unittest
 
 from app import create_app
 
+from app.api_1_0.views import db
+
 
 class TestRecord(unittest.TestCase):
     """Test record's functionality."""
@@ -23,6 +25,7 @@ class TestRecord(unittest.TestCase):
     def tearDown(self):
         """Remove instance variables."""
         del self.incident
+        db.clear()
 
     def test_create_incident_with_valid_data_true(self):
         """Test an incident can be created successfuly."""
@@ -189,5 +192,5 @@ class TestRecord(unittest.TestCase):
         result = self.client().get('/api/v1/incidents')
         self.assertEqual(result.status_code, 404)
         result = result.get_json()
-        self.assertEqual(len(result['data']),
+        self.assertEqual(result['data'],
                          "There are no incidences at the moment")
