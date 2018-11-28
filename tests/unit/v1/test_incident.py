@@ -152,3 +152,19 @@ class TestRecord(unittest.TestCase):
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
         self.assertEqual(res['errors'][0], "Created by should be an Integer")
+
+    def test_get_existing_incident_true(self):
+        """Test can get existing record."""
+        res = self.client().post('/api/v1/incidents', data=self.incident)
+        self.assertEqual(res.status_code, 201)
+        result = self.client().get('/api/v1/incidents/1')
+        self.assertEqual(result.status_code, 200)
+        result = result.get_json()
+        self.assertDictContainsSubset(result['data'][0], self.incident)
+
+    def test_get_non_existing_incident_false(self):
+        """Test cannot get non existing incident."""
+        res = self.client().get('/api/v1/incidents/1')
+        self.assertEqual(res.status_code, 404)
+        res = res.get_json()
+        self.assertEqual(res['errors'][0], "That resources cannot be found")
