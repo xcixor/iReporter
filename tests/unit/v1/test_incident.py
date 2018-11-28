@@ -19,8 +19,6 @@ class TestRecord(unittest.TestCase):
         }
         self.app = create_app('testing')
         self.client = self.app.test_client
-        # self.app_context = self.app.app_context()
-        # self.app_context.push()
 
     def tearDown(self):
         """Remove instance variables."""
@@ -32,8 +30,7 @@ class TestRecord(unittest.TestCase):
         self.assertEqual(res.status_code, 201)
         res = res.get_json()
         self.assertEqual(res['data']['message'],
-                        'Successfuly created incident')
-
+                         'Successfuly created incident')
 
     def test_incident_with_one_coordinate_false(self):
         """Test coordinate should have longitude and latitude."""
@@ -94,19 +91,19 @@ class TestRecord(unittest.TestCase):
                          'Location should not be empty')
 
     def test_create_incident_without_type_false(self):
-            """Test incident coordinates are floating point values."""
-            incident = {
-                "Created By": 1,
-                "Type": "",
-                "Location": "23.5, 34.6",
-                "Comment": "Thieves thieves thieves"
-            }
+        """Test incident coordinates are floating point values."""
+        incident = {
+            "Created By": 1,
+            "Type": "",
+            "Location": "23.5, 34.6",
+            "Comment": "Thieves thieves thieves"
+        }
 
-            res = self.client().post('/api/v1/incidents', data=incident)
-            self.assertEqual(res.status_code, 400)
-            res = res.get_json()
-            self.assertEqual(res['errors'][0],
-                             'Incident type should not be empty')
+        res = self.client().post('/api/v1/incidents', data=incident)
+        self.assertEqual(res.status_code, 400)
+        res = res.get_json()
+        self.assertEqual(res['errors'][0],
+                         'Incident type should not be empty')
 
     def test_create_incident_without_comment_false(self):
         """Test incident coordinates are floating point values."""
@@ -124,20 +121,20 @@ class TestRecord(unittest.TestCase):
                          'Comments cannot be empty')
 
     def test_create_incident_with_wrong_type_false(self):
-            """Test incident coordinates are floating point values."""
-            incident = {
-                "Created By": 1,
-                "Type": "a report",
-                "Location": "23.5, 34.6",
-                "Comment": "This clerks are corrupt"
-            }
+        """Test incident coordinates are floating point values."""
+        incident = {
+            "Created By": 1,
+            "Type": "a report",
+            "Location": "23.5, 34.6",
+            "Comment": "This clerks are corrupt"
+        }
 
-            res = self.client().post('/api/v1/incidents', data=incident)
-            self.assertEqual(res.status_code, 400)
-            res = res.get_json()
-            err_msg = 'Incident type should either be a \'red-flag\' or {0}'.\
-                      format("\'intervention\'")
-            self.assertEqual(res['errors'][0], err_msg)
+        res = self.client().post('/api/v1/incidents', data=incident)
+        self.assertEqual(res.status_code, 400)
+        res = res.get_json()
+        err_msg = 'Incident type should either be a \'red-flag\' or {0}'.\
+                  format("\'intervention\'")
+        self.assertEqual(res['errors'][0], err_msg)
 
     def test_create_incident_with_non_integer_created_by_id_false(self):
         """Test created by Id is an integer."""
@@ -169,3 +166,28 @@ class TestRecord(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         res = res.get_json()
         self.assertEqual(res['error'], "That resource cannot be found")
+
+    def test_get_all_incidences_true(self):
+        """Test user can get all incidences."""
+        res = self.client().post('/api/v1/incidents', data=self.incident)
+        self.assertEqual(res.status_code, 201)
+        incident = {
+            "Created By": 2,
+            "Type": "intervention",
+            "Location": "23.0, 34.5",
+            "Comment": "Clerks are take a bribe"
+        }
+        res = self.client().post('/api/v1/incidents', data=incident)
+        self.assertEqual(res.status_code, 201)
+        result = self.client().get('/api/v1/incidents')
+        self.assertEqual(result.status_code, 200)
+        result = result.get_json()
+        self.assertEqual(len(result['data']), 2)
+
+    def test_get_non_existing_incidences_false(self):
+        """Test app doesn't crash if there are no incidences."""
+        result = self.client().get('/api/v1/incidents')
+        self.assertEqual(result.status_code, 404)
+        result = result.get_json()
+        self.assertEqual(len(result['data']),
+                         "There are no incidences at the moment")
