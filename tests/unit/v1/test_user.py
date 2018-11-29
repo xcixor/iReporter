@@ -72,3 +72,42 @@ class TestUser(unittest.TestCase):
         self.assertEqual(res.status_code, 400)
         self.assertEqual(res['errors'][0],
                          'That emails password is already taken')
+
+    def test_signup_with_blank_email_false(self):
+        """Test email is present."""
+        user = {
+            "Email": "",
+            "Password": "pass1234",
+            "Confirm Password": "pass5678"
+        }
+        res = self.client().post('/api/v1/auth/signup', data=user)
+        self.assertEqual(res.status_code, 400)
+        res = res.get_json()
+        self.assertEqual(res['errors'][0],
+                         'Email should not be blank')
+
+    def test_signup_with_blank_password_false(self):
+        """Test password is present."""
+        user = {
+            "Email": "a@g.com",
+            "Password": "",
+            "Confirm Password": "pass5678"
+        }
+        res = self.client().post('/api/v1/auth/signup', data=user)
+        self.assertEqual(res.status_code, 400)
+        res = res.get_json()
+        self.assertEqual(res['errors'][0],
+                         'Password should not be blank')
+
+    def test_signup_with_blank_confirm_password_false(self):
+        """Test password is present."""
+        user = {
+            "Email": "a@g.com",
+            "Password": "pass1234",
+            "Confirm Password": "    "
+        }
+        res = self.client().post('/api/v1/auth/signup', data=user)
+        self.assertEqual(res.status_code, 400)
+        res = res.get_json()
+        self.assertEqual(res['errors'][0],
+                         'Password should not be blank')

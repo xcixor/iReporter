@@ -8,6 +8,7 @@ class IncidentValidators(object):
     """Validates an Incident object data."""
 
     def __init__(self):
+        """Initialize validator with empty errors list."""
         self.errors = []
 
     def validate_creator(self, creator):
@@ -198,3 +199,40 @@ class IncidentModel(IncidentValidators):
             'Title': self.title,
             'Unique Identifier': self.unique_identifier
         }
+
+
+class UserValidators(object):
+    """Validate user fields."""
+
+    def __init__(self):
+        """Initialize validator with empty errors list."""
+        self.errors = []
+
+    def validate_email(self, email):
+        """Validate email."""
+        if not is_empty(email):
+            if re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",
+                        email):
+                return True
+        else:
+            self.errors.append("Email should not be blank")
+            return False
+
+    def validate_password(self, password):
+        """Validate password."""
+        if not is_empty(password):
+            if len(password) >= 8:
+                return True
+            else:
+                self.errors.append("Password should be atleast eight characters")
+                return False
+        else:
+            self.errors.append("Password should not be blank")
+
+    def match_password(self, password, confirm_passowrd):
+        """Match passwords."""
+        if password == confirm_passowrd:
+            return True
+        else:
+            self.errors.append("Passwords should match")
+            return False
