@@ -236,3 +236,47 @@ class UserValidators(object):
         else:
             self.errors.append("Passwords should match")
             return False
+
+
+class User(UserValidators):
+    """Models a user."""
+
+    def __init__(self, email, password, confirm_password):
+        """Initialize a user.
+        args:
+            email: user email id
+            password: secret characters
+            confirm_passowrd: confirmation password
+        """
+        super().__init__()
+        self.email = email
+        self.password = password
+        self.confirm_passowrd = confirm_password
+
+    def sign_up(self, users):
+        """Register user.
+
+        args:
+            users: list to save the user
+        """
+        if self.validate_email(self.email) and \
+           self.validate_password(self.password) and \
+           self.validate_password(self.confirm_passowrd):
+            if self.match_password(self.confirm_passowrd, self.password):
+                if not self.find_user(self.email, users):
+                    users.append({self.email: self.describe_user()})
+                    return {'status': True,
+                            'message': {"Id": self.email,
+                                        "message": "You have successfuly signed up"}}
+                return {'status': False,
+                        'message': "That emails password is already taken"}
+            return {'status': False, 'message': {'errors': self.errors}}
+        return {'status': False, 'message': {'errors': self.errors}}
+
+    @classmethod
+    def find_user(cls, email, users):
+        """Retrieve user."""
+        for user in users:
+            for key, value in user.items():
+                if key == email:
+                    return value
