@@ -1,10 +1,11 @@
 """Api endpoint implementation."""
 from flask_restful import Resource, reqparse
 
-from app.api_1_0.models import IncidentModel, IncidentValidators
+from app.api_1_0.models import IncidentModel, IncidentValidators, User
 
 db = []
 
+users = []
 
 class Incident(Resource):
     """Implements an Incident's endpoints."""
@@ -114,3 +115,25 @@ class IncidentManipulation(Resource):
                     'data': "Incident successfuly deleted"}, 200
         return {'status': 404, 'error':
                 'That resource cannot be found'}, 404
+
+
+class Signup(Resource):
+    """Register user."""
+
+    def __init__(self):
+        """Initialize users list."""
+        self.users = users
+
+    def post(self):
+        """Create user."""
+        parser = reqparse.RequestParser()
+        parser.add_argument('Email')
+        parser.add_argument('Password')
+        parser.add_argument('Confirm Password')
+        args = parser.parse_args()
+
+        user = User(args['Email'], args['Password'], args['Confirm Password'])
+        res = user.sign_up(self.users)
+        if res.get('status'):
+            return {'data': {'message': res.get('message'), 'status': 201}}, 201
+        return {'status': 400, 'errors': user.errors}, 400

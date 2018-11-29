@@ -9,3 +9,4 @@ api.add_resource(views.EditIncidentComment,
                  '/incidents/<incident_id>/comments')
 api.add_resource(views.EditIncidentLocation,
                  '/incidents/<incident_id>/location')
+api.add_resource(views.Signup, '/auth/signup')

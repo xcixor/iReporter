@@ -214,6 +214,9 @@ class UserValidators(object):
             if re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",
                         email):
                 return True
+            else:
+                self.errors.append('Invalid Email Address')
+                return False
         else:
             self.errors.append("Email should not be blank")
             return False
@@ -269,9 +272,16 @@ class User(UserValidators):
                             'message': {"Id": self.email,
                                         "message": "You have successfuly signed up"}}
                 return {'status': False,
-                        'message': "That emails password is already taken"}
+                        'message': self.errors.append("That email is already taken")}
             return {'status': False, 'message': {'errors': self.errors}}
         return {'status': False, 'message': {'errors': self.errors}}
+
+    def describe_user(self):
+        """Return object representation of user."""
+        return {
+            "Email": self.email,
+            "Password": self.password
+        }
 
     @classmethod
     def find_user(cls, email, users):

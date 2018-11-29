@@ -3,7 +3,7 @@ import unittest
 
 from app import create_app
 
-from app.api_1_0 import users
+from app.api_1_0.views import users
 
 
 class TestUser(unittest.TestCase):
@@ -12,23 +12,27 @@ class TestUser(unittest.TestCase):
     def setUp(self):
         self.user = {
             "Email": "user@example.com",
-            "Password": "pass123",
-            "Confirm Password": "pass123"
+            "Password": "pass1234",
+            "Confirm Password": "pass1234"
         }
         self.app = create_app('testing')
         self.client = self.app.test_client
+
+    def tearDown(self):
+        """Clean up after test."""
+        users.clear()
 
     def test_signup_with_valid_credentials_success(self):
         """Test user can register."""
         res = self.client().post('/api/v1/auth/signup', data=self.user)
         self.assertEqual(res.status_code, 201)
         res = res.get_json()
-        self.assertEqual(res['data']['message'], 'You have successfuly signed up')
+        self.assertEqual(res['data']['message']['message'], 'You have successfuly signed up')
 
     def test_signup_with_invalid_email_false(self):
         """Test email is valid."""
         user = {
-            "Email": "user@example.com",
+            "Email": "user.com",
             "Password": "pass1234",
             "Confirm Password": "pass1234"
         }
@@ -70,8 +74,8 @@ class TestUser(unittest.TestCase):
         self.assertEqual(res.status_code, 201)
         res = self.client().post('/api/v1/auth/signup', data=self.user)
         self.assertEqual(res.status_code, 400)
-        self.assertEqual(res['errors'][0],
-                         'That emails password is already taken')
+        res = res.get_json()
+        self.assertEqual(res['errors'][0], 'That email is already taken')
 
     def test_signup_with_blank_email_false(self):
         """Test email is present."""
