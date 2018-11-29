@@ -245,7 +245,6 @@ class TestRecord(unittest.TestCase):
             "Location": "22.0, 34.5",
             "Comment": "Clerks are take a bribe",
         }
-        print(db)
         res = self.client().put('/api/v1/incidents/1', data=edit_data)
         self.assertEqual(res.status_code, 201)
 
@@ -268,7 +267,6 @@ class TestRecord(unittest.TestCase):
         res = self.client().post('/api/v1/incidents', data=self.incident)
         self.assertEqual(res.status_code, 201)
         result = self.client().delete('/api/v1/incidents/1')
-        print(result, '******')
         self.assertEqual(result.status_code, 200)
         result = result.get_json()
         self.assertEqual(
@@ -281,3 +279,26 @@ class TestRecord(unittest.TestCase):
         result = result.get_json()
         self.assertEqual(
             result['error'], "That resource cannot be found")
+
+    def test_edit_existing_record_comment_true(self):
+        """Test user can edit an incidences."""
+        res = self.client().post('/api/v1/incidents', data=self.incident)
+        self.assertEqual(res.status_code, 201)
+        edit_data = {
+            "Comment": "Clerks are taking bribes"
+        }
+        res = self.client().patch('/api/v1/incidents/1', data=edit_data)
+        self.assertEqual(res.status_code, 200)
+        res = res.get_json()
+        self.assertEqual(res['data']['message'], "Updated red-flag record’s comment")
+
+    def test_edit_non_existing_record_comment_false(self):
+        """Test user cannot edit a non exisitng incident."""
+        edit_data = {
+            "Comment": "Clerks are taking bribes"
+        }
+        res = self.client().patch('/api/v1/incidents/1', data=edit_data)
+        self.assertEqual(res.status_code, 404)
+        res = res.get_json()
+        self.assertEqual(
+            res['error'], "That resource cannot be found")
