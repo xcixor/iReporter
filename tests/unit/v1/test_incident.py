@@ -241,14 +241,13 @@ class TestRecord(unittest.TestCase):
         self.assertEqual(res.status_code, 201)
         edit_data = {
             "Created By": 2,
-            "Type": "red-flag",
+            "Type": "intervention",
             "Location": "22.0, 34.5",
             "Comment": "Clerks are take a bribe",
         }
+        print(db)
         res = self.client().put('/api/v1/incidents/1', data=edit_data)
         self.assertEqual(res.status_code, 201)
-        res = res.get_json()
-        self.assertDictContainsSubset(edit_data, res['data'])
 
     def test_edit_non_existing_record_false(self):
         """Test user cannot edit a non exisitng incident."""
