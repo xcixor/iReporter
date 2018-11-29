@@ -15,7 +15,8 @@ class TestRecord(unittest.TestCase):
             "Created By": 1,
             "Type": "red-flag",
             "Location": "23.0, 34.5",
-            "Comment": "Thieves thieves thieves"
+            "Comment": "Thieves thieves thieves",
+            "Title": "Corruption of the highest order"
         }
         self.app = create_app('testing')
         self.client = self.app.test_client
@@ -39,7 +40,8 @@ class TestRecord(unittest.TestCase):
             "Created By": 1,
             "Type": "red-flag",
             "Location": "34.5",
-            "Comment": "Thieves thieves thieves"
+            "Comment": "Thieves thieves thieves",
+            "Title": "Corruption of the highest order"
         }
         res = self.client().post('/api/v1/incidents', data=incident)
         self.assertEqual(res.status_code, 400)
@@ -52,7 +54,8 @@ class TestRecord(unittest.TestCase):
             "Created By": 1,
             "Type": "red-flag",
             "Location": "34.5, string",
-            "Comment": "Thieves thieves thieves"
+            "Comment": "Thieves thieves thieves",
+            "Title": "Corruption of the highest order"
         }
 
         res = self.client().post('/api/v1/incidents', data=incident)
@@ -62,12 +65,13 @@ class TestRecord(unittest.TestCase):
                          'Coordinates should be floating point values')
 
     def test_create_incident_without_created_by_false(self):
-        """Test incident coordinates are floating point values."""
+        """Test user cannot create incident without incidence owner."""
         incident = {
             "Created By": "",
             "Type": "red-flag",
             "Location": "34.5, 45.6",
-            "Comment": "Thieves thieves thieves"
+            "Comment": "Thieves thieves thieves",
+            "Title": "Corruption of the highest order"
         }
 
         res = self.client().post('/api/v1/incidents', data=incident)
@@ -77,12 +81,13 @@ class TestRecord(unittest.TestCase):
                          'Incident owner should not be blank')
 
     def test_create_incident_without_location_false(self):
-        """Test incident coordinates are floating point values."""
+        """Test user cannot create incidence without location."""
         incident = {
             "Created By": 1,
             "Type": "red-flag",
             "Location": "",
-            "Comment": "Thieves thieves thieves"
+            "Comment": "Thieves thieves thieves",
+            "Title": "Corruption of the highest order"
         }
 
         res = self.client().post('/api/v1/incidents', data=incident)
@@ -92,12 +97,13 @@ class TestRecord(unittest.TestCase):
                          'Location should not be empty')
 
     def test_create_incident_without_type_false(self):
-        """Test incident coordinates are floating point values."""
+        """Test user cannot create incident without Type."""
         incident = {
             "Created By": 1,
             "Type": "",
             "Location": "23.5, 34.6",
-            "Comment": "Thieves thieves thieves"
+            "Comment": "Thieves thieves thieves",
+            "Title": "Corruption of the highest order"
         }
 
         res = self.client().post('/api/v1/incidents', data=incident)
@@ -107,12 +113,13 @@ class TestRecord(unittest.TestCase):
                          'Incident type should not be empty')
 
     def test_create_incident_without_comment_false(self):
-        """Test incident coordinates are floating point values."""
+        """Test cannot create incident without comments."""
         incident = {
             "Created By": 1,
             "Type": "red-flag",
             "Location": "23.5, 34.6",
-            "Comment": "      "
+            "Comment": "      ",
+            "Title": "Corruption of the highest order"
         }
 
         res = self.client().post('/api/v1/incidents', data=incident)
@@ -121,13 +128,46 @@ class TestRecord(unittest.TestCase):
         self.assertEqual(res['errors'][0],
                          'Comments cannot be empty')
 
+    def test_create_incident_without_title_false(self):
+        """Test user cannot create incident without title."""
+        incident = {
+            "Created By": 1,
+            "Type": "red-flag",
+            "Location": "23.5, 34.6",
+            "Comment": "Officers in this office are taking....",
+            "Title": ""
+        }
+
+        res = self.client().post('/api/v1/incidents', data=incident)
+        self.assertEqual(res.status_code, 400)
+        res = res.get_json()
+        self.assertEqual(res['errors'][0],
+                         'Title cannot be empty')
+
+    def test_create_incident_without_special_characters_title_false(self):
+        """Test cannot create incident with special characters title."""
+        incident = {
+            "Created By": 1,
+            "Type": "red-flag",
+            "Location": "23.5, 34.6",
+            "Comment": "Officers in this office are taking....",
+            "Title": "***&&&&"
+        }
+
+        res = self.client().post('/api/v1/incidents', data=incident)
+        self.assertEqual(res.status_code, 400)
+        res = res.get_json()
+        self.assertEqual(res['errors'][0],
+                         'Title cannot contain special characters')
+
     def test_create_incident_with_wrong_type_false(self):
-        """Test incident coordinates are floating point values."""
+        """Test cannot create incident with the wrong type."""
         incident = {
             "Created By": 1,
             "Type": "a report",
             "Location": "23.5, 34.6",
-            "Comment": "This clerks are corrupt"
+            "Comment": "This clerks are corrupt",
+            "Title": "Corruption of the highest order"
         }
 
         res = self.client().post('/api/v1/incidents', data=incident)
@@ -143,7 +183,8 @@ class TestRecord(unittest.TestCase):
             "Created By": "ptah",
             "Type": "red-flag",
             "Location": "23.5, 34.6",
-            "Comment": "This clerks are corrupt"
+            "Comment": "This clerks are corrupt",
+            "Title": "Corruption of the highest order"
         }
 
         res = self.client().post('/api/v1/incidents', data=incident)
@@ -176,7 +217,8 @@ class TestRecord(unittest.TestCase):
             "Created By": 2,
             "Type": "intervention",
             "Location": "23.0, 34.5",
-            "Comment": "Clerks are take a bribe"
+            "Comment": "Clerks are take a bribe",
+            "Title": "Corruption of the highest order"
         }
         res = self.client().post('/api/v1/incidents', data=incident)
         self.assertEqual(res.status_code, 201)
@@ -201,7 +243,7 @@ class TestRecord(unittest.TestCase):
             "Created By": 2,
             "Type": "red-flag",
             "Location": "22.0, 34.5",
-            "Comment": "Clerks are take a bribe"
+            "Comment": "Clerks are take a bribe",
         }
         res = self.client().put('/api/v1/incidents/1', data=edit_data)
         self.assertEqual(res.status_code, 201)
