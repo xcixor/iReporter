@@ -146,18 +146,6 @@ class IncidentModel(IncidentValidators):
                     return value
 
     @classmethod
-    def update_incident(cls, incident_id, incident_list, data):
-        """Update an incident."""
-        incident = cls.find_incident(incident_id, incident_list)
-        if isinstance(incident, dict):
-            for value in incident_list:
-                for key, value in value.items():
-                    if str(key) == str(incident_id):
-                        value.update(data)
-                        return {'status': True, 'message': value}
-        return {'status': False, 'message': 'That resource cannot be found'}
-
-    @classmethod
     def update_comment(cls, incident_id, incident_list, comment):
         """Update an incident."""
         incident = cls.find_incident(incident_id, incident_list)
@@ -170,14 +158,14 @@ class IncidentModel(IncidentValidators):
         return {'status': False, 'message': 'That resource cannot be found'}
 
     @classmethod
-    def update_location(cls, incident_id, incident_list, comment):
+    def update_location(cls, incident_id, incident_list, location):
         """Update an incident."""
         incident = cls.find_incident(incident_id, incident_list)
         if isinstance(incident, dict):
             for value in incident_list:
                 for key, value in value.items():
                     if str(key) == str(incident_id):
-                        value['Location'] = comment
+                        value['Location'] = location
                         return {'status': True, 'message': value['Id']}
         return {'status': False, 'message': 'That resource cannot be found'}
 

@@ -85,7 +85,7 @@ class EditIncidentLocation(Resource):
         else:
             return {'status': 400, 'error': validate.errors}, 400
 
-        res = IncidentModel.update_comment(incident_id, self.db, location)
+        res = IncidentModel.update_location(incident_id, self.db, location)
         if res['status']:
             return {'status': 200, 'data': {'Id': res['message'], 'message': 'Updated incident location'}}, 200
         return {'status': 404, 'error': res['message']}, 404
@@ -105,29 +105,6 @@ class IncidentManipulation(Resource):
             return {'status': 200, 'data': incident}, 200
         else:
             return {'status': 404, 'error': 'That resource cannot be found'}, 404
-
-    def put(self, incident_id):
-        """Edit an incidence."""
-        parser = reqparse.RequestParser()
-        parser.add_argument('Type')
-        parser.add_argument('Title')
-        args = parser.parse_args()
-        new_incident = {}
-        validate = IncidentValidators()
-        if args['Type']:
-            if validate.validate_incident_type(args['Type']):
-                new_incident['Type'] = args['Type']
-            else:
-                return {'status': 400, 'error': validate.errors}, 400
-        if args['Title']:
-            if validate.validate_title(args['Title']):
-                new_incident['Title'] = args['Title']
-            else:
-                return {'status': 400, 'error': validate.errors}, 400
-        res = IncidentModel.update_incident(incident_id, self.db, new_incident)
-        if res['status']:
-            return {'status': 201, 'data': res['message']}, 201
-        return {'status': 404, 'error': res['message']}, 404
 
     def delete(self, incident_id):
         """Delete an incident."""

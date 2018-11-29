@@ -235,33 +235,6 @@ class TestRecord(unittest.TestCase):
         self.assertEqual(result['data'],
                          "There are no incidences at the moment")
 
-    def test_edit_existing_record_true(self):
-        """Test user can edit an incidences."""
-        res = self.client().post('/api/v1/incidents', data=self.incident)
-        self.assertEqual(res.status_code, 201)
-        edit_data = {
-            "Created By": 2,
-            "Type": "intervention",
-            "Location": "22.0, 34.5",
-            "Comment": "Clerks are take a bribe",
-        }
-        res = self.client().put('/api/v1/incidents/1', data=edit_data)
-        self.assertEqual(res.status_code, 201)
-
-    def test_edit_non_existing_record_false(self):
-        """Test user cannot edit a non exisitng incident."""
-        edit_data = {
-            "Created By": 2,
-            "Type": "red-flag",
-            "Location": "22.0, 34.5",
-            "Comment": "Clerks are take a bribe"
-        }
-        res = self.client().put('/api/v1/incidents/1', data=edit_data)
-        self.assertEqual(res.status_code, 404)
-        res = res.get_json()
-        self.assertEqual(
-            res['error'], "That resource cannot be found")
-
     def test_delete_existing_incident_true(self):
         """Test user can delete an incident successfuly."""
         res = self.client().post('/api/v1/incidents', data=self.incident)
