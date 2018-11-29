@@ -1,52 +1,16 @@
 """Contains the models for the data."""
 import datetime
 
+import re
 
-class IncidentModel(object):
-    """This class models an Incident."""
 
-    def __init__(self, created_by, incident_type, location, comment, errors=[]):
-        """Initialize an Incident object.
+class IncidentValidators(object):
+    """Validates an Incident object data."""
 
-        args:
-            created_by(str): incident owner
-            type(str): either of intervention or red-flag
-            location(str): longituted, latitude coordinates
-            status(str): draft, under investigation, resolved or rejected
-            comment(str): A description of the incident
-        """
-        self.errors = errors
-        self.id = ''
-        self.created_by = created_by
-        self.created_on = datetime.datetime.now()
-        self.incident_type = incident_type
-        self.location = location
-        self.status = ''
-        self.comment = comment
-        self.images = []
-        self.videos = []
+    def __init__(self):
+        self.errors = []
 
-    def save(self, db):
-        """Save incident to db.
-
-        args:
-            db(list): The list into which to save the incident.
-        """
-        if self.created_by and self.incident_type and self.location and self.comment:
-            self.id = len(db) + 1
-            db.append({self.id: self.describe_incident()})
-            return {'status': True, 'message': {"Id": self.id,
-                    "message": "Successfuly created incident"}}
-        else:
-            return {'status': False, 'message': {'errors': self.errors}}
-
-    @property
-    def created_by(self):
-        """Get incident created_by."""
-        return self._created_by
-
-    @created_by.setter
-    def created_by(self, creator):
+    def validate_creator(self, creator):
         """Verify and set created_by."""
         if not is_empty(creator):
             created_by = ''
@@ -55,41 +19,41 @@ class IncidentModel(object):
             except:
                 created_by = None
             if created_by is not None:
-                self._created_by = creator
+                return True
             else:
-                self._created_by = None
                 self.errors.append("Created by should be an Integer")
+                return False
         else:
-            self._created_by = None
             self.errors.append("Incident owner should not be blank")
+            return False
 
+    def validate_title(self, title):
+        """Validate Title."""
+        if not is_empty(title):
+            if re.match("^[a-zA-Z0-9 _]*$", title):
+                return True
+            else:
+                self.errors.append(("Title cannot contain special characters"))
+        else:
+            self.errors.append("Title cannot be empty")
+            return False
 
-    @property
-    def incident_type(self):
-        """Get incident_type."""
-        return self._incident_type
-
-    @incident_type.setter
-    def incident_type(self, incident_type):
+    def validate_incident_type(self, incident_type):
+        """Validate the incident type."""
         if not is_empty(incident_type):
             incident_types = ["red-flag", "intervention"]
             if incident_type in incident_types:
-                self._incident_type = incident_type
+                return True
             else:
-                self._incident_type = None
                 self.errors.append(
                     "Incident type should either be a 'red-flag' or 'intervention'")
+                return False
         else:
-            self._incident_type = None
             self.errors.append("Incident type should not be empty")
+            return False
 
-    @property
-    def location(self):
-        """Get location."""
-        return self._location
-
-    @location.setter
-    def location(self, location):
+    def validate_location(self, location):
+        """Validate location."""
         if not is_empty(location):
             coordinates = [x.strip() for x in location.split(',')]
             if len(coordinates) == 2:
@@ -102,29 +66,105 @@ class IncidentModel(object):
                     longitude = None
                     lat = None
                 if longitude is not None and lat is not None:
-                    self._location = location
+                    return True
                 else:
                     self.errors.append(
                             "Coordinates should be floating point values")
-                    self._location = None
+                    return False
             else:
-                self._location = None
                 self.errors.append("Two coordinates required")
+                return False
         else:
-            self._location = None
             self.errors.append("Location should not be empty")
+            return False
 
-    @property
-    def comment(self):
-        return self._comment
-
-    @comment.setter
-    def comment(self, comment):
+    def validate_comment(self, comment):
+        """Validate comment."""
         if not is_empty(comment):
-            self._comment = comment
+            return True
         else:
             self.errors.append("Comments cannot be empty")
-            self._comment = None
+            return False
+
+
+def is_empty(value):
+    """Check if string is empty or whitespace."""
+    if value.isspace() or value == "":
+        return True
+
+
+class IncidentModel(IncidentValidators):
+    """This class models an Incident."""
+
+    def __init__(self, created_by, incident_type, location, title, comment):
+        """Initialize an Incident object.
+
+        args:
+            created_by(str): incident owner
+            type(str): either of intervention or red-flag
+            location(str): longituted, latitude coordinates
+            status(str): draft, under investigation, resolved or rejected
+            comment(str): A description of the incident
+        """
+        super().__init__()
+        self.id = ''
+        self.created_by = created_by
+        self.created_on = datetime.datetime.now()
+        self.incident_type = incident_type
+        self.location = location
+        self.status = ''
+        self.title = title
+        self.unique_identifier = ''
+        self.comment = comment
+        self.images = []
+        self.videos = []
+
+    def save(self, db):
+        """Save incident to db.
+
+        args:
+            db(list): The list into which to save the incident.
+        """
+        if self.validate_creator(self.created_by) and \
+           self.validate_incident_type(self.incident_type) and \
+           self.validate_location(self.location) and \
+           self.validate_comment(self.comment) and \
+           self.validate_title(self.title):
+            self.id = len(db) + 1
+            db.append({self.id: self.describe_incident()})
+            return {'status': True, 'message': {"Id": self.id,
+                    "message": "Successfuly created incident"}}
+        else:
+            return {'status': False, 'message': {'errors': self.errors}}
+
+    @classmethod
+    def find_incident(cls, incident_id, incident_list):
+        """Retrieve an incident."""
+        for incident in incident_list:
+            for key, value in incident.items():
+                if str(key) == str(incident_id):
+                    return value
+
+    @classmethod
+    def update_incident(cls, incident_id, incident_list, data):
+        """Update an incident."""
+        incident = cls.find_incident(incident_id, incident_list)
+        if isinstance(incident, dict):
+            for value in incident_list:
+                for key, value in value.items():
+                    if str(key) == str(incident_id):
+                        value.update(data)
+                        return {'status': True, 'message': value}
+        return {'status': False, 'message': 'That resource cannot be found'}
+
+    @classmethod
+    def delete_incident(cls, incident_id, incident_list):
+        """Delete an incident."""
+        for incident in incident_list:
+            for key, value in incident.items():
+                if str(key) == str(incident_id):
+                    incident_list.remove(incident)
+                    return True
 
     def describe_incident(self):
         """Return the object description.
@@ -142,11 +182,7 @@ class IncidentModel(object):
             'Status': self.status,
             'Comment': self.comment,
             'Images': self.images,
-            'Videos': self.videos
+            'Videos': self.videos,
+            'Title': self.title,
+            'Unique Identifier': self.unique_identifier
         }
-
-
-def is_empty(value):
-    """Check if string is empty or whitespace."""
-    if value.isspace() or value == "":
-        return True

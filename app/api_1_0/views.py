@@ -1,7 +1,7 @@
 """Api endpoint implementation."""
 from flask_restful import Resource, reqparse
 
-from app.api_1_0.models import IncidentModel
+from app.api_1_0.models import IncidentModel, IncidentValidators
 
 db = []
 
@@ -12,6 +12,7 @@ class Incident(Resource):
     def __init__(self):
         """Initialize db."""
         self.db = db
+        # self.incident = None
 
     def post(self):
         """Send incident creation request."""
@@ -22,10 +23,11 @@ class Incident(Resource):
         parser.add_argument('Images', type=str)
         parser.add_argument('Video', type=str)
         parser.add_argument('Comment')
+        parser.add_argument('Title')
         args = parser.parse_args()
         incident = IncidentModel(
             args['Created By'], args['Type'], args['Location'],
-            args['Comment'])
+            args['Title'], args['Comment'])
         res = incident.save(db)
         if res['status']:
             return {'status': 201, 'data': res['message']}, 201
@@ -49,16 +51,9 @@ class IncidentManipulation(Resource):
         """Initialize db."""
         self.db = db
 
-    def find_incident(self, incident_id):
-        """Find and incident in db."""
-        for incident in self.db:
-            for key, value in incident.items():
-                if str(key) == str(incident_id):
-                    return value
-
     def get(self, incident_id):
         """Get a specefic incident."""
-        incident = self.find_incident(incident_id)
+        incident = IncidentModel.find_incident(incident_id, self.db)
         if isinstance(incident, dict):
             return {'status': 200, 'data': incident}, 200
         else:
@@ -67,45 +62,31 @@ class IncidentManipulation(Resource):
     def put(self, incident_id):
         """Edit an incidence."""
         parser = reqparse.RequestParser()
-        parser.add_argument('Created By')
         parser.add_argument('Type')
-        parser.add_argument('Location')
-        parser.add_argument('Images', type=str)
-        parser.add_argument('Video', type=str)
-        parser.add_argument('Comment')
+        parser.add_argument('Title')
         args = parser.parse_args()
         new_incident = {}
-
-        if args['Created By']:
-            new_incident['Created By'] = int(args['Created By'])
-
+        validate = IncidentValidators()
         if args['Type']:
-            new_incident['Type'] = args['Type']
-
-        if args['Location']:
-            new_incident['Location'] = args['Location']
-
-        if args['Comment']:
-            new_incident['Comment'] = args['Comment']
-
-        incident = self.find_incident(incident_id)
-        if isinstance(incident, dict):
-            for value in self.db:
-                for key, value in value.items():
-                    if str(key) == str(incident_id):
-                        value.update(new_incident)
-                        return {'status': 201, 'data': value}, 201
-        return {'status': 404, 'error': 'That resource cannot be found'}, 404
+            if validate.validate_incident_type(args['Type']):
+                new_incident['Type'] = args['Type']
+            else:
+                return {'status': 400, 'error': validate.errors}
+        if args['Title']:
+            if validate.validate_title(args['Title']):
+                new_incident['Title'] = args['Title']
+            else:
+                return {'status': 400, 'error': validate.errors}
+        res = IncidentModel.update_incident(incident_id, self.db, new_incident)
+        if res['status']:
+            return {'status': 201, 'data': res['message']}, 201
+        return {'status': 404, 'error': res['message']}, 404
 
     def delete(self, incident_id):
         """Delete an incident."""
-        incident = self.find_incident(incident_id)
-
-        for incident in self.db:
-            for key, value in incident.items():
-                if str(key) == str(incident_id):
-                    self.db.remove(incident)
-                    return {'status': 200,
+        res = IncidentModel.delete_incident(incident_id, self.db)
+        if res:
+            return {'status': 200,
                     'data': "Incident successfuly deleted"}, 200
         return {'status': 404, 'error':
                 'That resource cannot be found'}, 404
