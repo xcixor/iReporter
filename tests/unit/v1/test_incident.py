@@ -1,4 +1,4 @@
-"""Contains the tests for a record."""
+"""Contains the tests for an incident."""
 import unittest
 
 from app import create_app
