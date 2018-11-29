@@ -287,41 +287,53 @@ class TestRecord(unittest.TestCase):
         edit_data = {
             "Comment": "Clerks are taking bribes"
         }
-        res = self.client().patch('/api/v1/incidents/1', data=edit_data)
+        res = self.client().patch('/api/v1/incidents/1/comments', data=edit_data)
         self.assertEqual(res.status_code, 200)
         res = res.get_json()
         self.assertEqual(res['data']['message'], "Updated red-flag record’s comment")
+
+    def test_edit_existing_record_with_blank_comment_false(self):
+        """Test user cannot edit an incident comment without a comment."""
+        res = self.client().post('/api/v1/incidents', data=self.incident)
+        self.assertEqual(res.status_code, 201)
+        edit_data = {
+            "Comment": ""
+        }
+        res = self.client().patch('/api/v1/incidents/1/comments', data=edit_data)
+        self.assertEqual(res.status_code, 400)
+        res = res.get_json()
+        self.assertEqual(res['error'][0], "Comments cannot be empty")
 
     def test_edit_non_existing_record_comment_false(self):
         """Test user cannot edit a non exisitng incident."""
         edit_data = {
             "Comment": "Clerks are taking bribes"
         }
-        res = self.client().patch('/api/v1/incidents/1', data=edit_data)
+        res = self.client().patch('/api/v1/incidents/1/comments', data=edit_data)
         self.assertEqual(res.status_code, 404)
         res = res.get_json()
         self.assertEqual(
             res['error'], "That resource cannot be found")
 
-    def test_edit_existing_record_comment_true(self):
+    def test_edit_existing_record_location_true(self):
         """Test user can edit an incidences."""
         res = self.client().post('/api/v1/incidents', data=self.incident)
         self.assertEqual(res.status_code, 201)
         edit_data = {
             "Location": "23.4, 23.6"
         }
-        res = self.client().patch('/api/v1/incidents/1', data=edit_data)
+        res = self.client().patch('/api/v1/incidents/1/location', data=edit_data)
         self.assertEqual(res.status_code, 200)
         res = res.get_json()
         self.assertEqual(res['data']['message'],
                          "Updated incident location")
 
-    def test_edit_non_existing_record_comment_false(self):
+    def test_edit_non_existing_record_location_false(self):
         """Test user cannot edit a non exisitng incident."""
         edit_data = {
             "Location": "23.4, 23.6"
         }
-        res = self.client().patch('/api/v1/incidents/1', data=edit_data)
+        res = self.client().patch('/api/v1/incidents/1/location', data=edit_data)
         self.assertEqual(res.status_code, 404)
         res = res.get_json()
         self.assertEqual(
@@ -334,10 +346,10 @@ class TestRecord(unittest.TestCase):
         edit_data = {
             "Location": "23.io, lat"
         }
-        res = self.client().patch('/api/v1/incidents/1', data=edit_data)
+        res = self.client().patch('/api/v1/incidents/1/location', data=edit_data)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
-        self.assertEqual(res['error'],
+        self.assertEqual(res['error'][0],
                          "Coordinates should be floating point values")
 
     def test_edit_record_with_only_one_location_false(self):
@@ -347,8 +359,21 @@ class TestRecord(unittest.TestCase):
         edit_data = {
             "Location": "23.7"
         }
-        res = self.client().patch('/api/v1/incidents/1', data=edit_data)
+        res = self.client().patch('/api/v1/incidents/1/location', data=edit_data)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
-        self.assertEqual(res['error'],
+        self.assertEqual(res['error'][0],
                          "Two coordinates required")
+
+    def test_edit_record_with_missing_location_false(self):
+        """Test user cannot edit location with empty location."""
+        res = self.client().post('/api/v1/incidents', data=self.incident)
+        self.assertEqual(res.status_code, 201)
+        edit_data = {
+            "Location": ""
+        }
+        res = self.client().patch('/api/v1/incidents/1/location', data=edit_data)
+        self.assertEqual(res.status_code, 400)
+        res = res.get_json()
+        self.assertEqual(res['error'][0],
+                         "Location should not be empty")

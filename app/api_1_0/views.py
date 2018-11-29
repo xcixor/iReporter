@@ -44,6 +44,53 @@ class Incident(Resource):
                     'status': 404}, 404
 
 
+class EditIncidentComment(Resource):
+    """Edit incident comment."""
+
+    def __init__(self):
+        self.db = db
+
+    def patch(self, incident_id):
+        """Edit an incidence."""
+        parser = reqparse.RequestParser()
+        parser.add_argument('Comment')
+        args = parser.parse_args()
+        validate = IncidentValidators()
+        comment = args['Comment']
+        if validate.validate_comment(args['Comment']):
+            comment = args['Comment']
+        else:
+            return {'status': 400, 'error': validate.errors}, 400
+        res = IncidentModel.update_comment(incident_id, self.db, comment)
+        if res['status']:
+            return {'status': 200, 'data': {'Id': res['message'], 'message': 'Updated red-flag record’s comment'}}, 200
+        return {'status': 404, 'error': res['message']}, 404
+
+
+class EditIncidentLocation(Resource):
+    """Edit Incident location."""
+
+    def __init__(self):
+        self.db = db
+
+    def patch(self, incident_id):
+        """Edit an incidence location."""
+        parser = reqparse.RequestParser()
+        parser.add_argument('Location')
+        args = parser.parse_args()
+        validate = IncidentValidators()
+        location = args['Location']
+        if validate.validate_location(args['Location']):
+            location = args['Location']
+        else:
+            return {'status': 400, 'error': validate.errors}, 400
+
+        res = IncidentModel.update_comment(incident_id, self.db, location)
+        if res['status']:
+            return {'status': 200, 'data': {'Id': res['message'], 'message': 'Updated incident location'}}, 200
+        return {'status': 404, 'error': res['message']}, 404
+
+
 class IncidentManipulation(Resource):
     """Manage incidents."""
 
@@ -90,20 +137,3 @@ class IncidentManipulation(Resource):
                     'data': "Incident successfuly deleted"}, 200
         return {'status': 404, 'error':
                 'That resource cannot be found'}, 404
-
-    def patch(self, incident_id):
-        """Edit an incidence."""
-        parser = reqparse.RequestParser()
-        parser.add_argument('Comment')
-        args = parser.parse_args()
-        validate = IncidentValidators()
-        comment = ''
-        if args['Comment']:
-            if validate.validate_comment(args['Comment']):
-                comment = args['Comment']
-            else:
-                return {'status': 400, 'error': validate.errors}, 400
-        res = IncidentModel.update_comment(incident_id, self.db, comment)
-        if res['status']:
-            return {'status': 200, 'data': {'Id': res['message'], 'message': 'Updated red-flag record’s comment'}}, 200
-        return {'status': 404, 'error': res['message']}, 404
