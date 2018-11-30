@@ -148,7 +148,7 @@ class IncidentModel(IncidentValidators):
 
     @classmethod
     def update_comment(cls, incident_id, incident_list, comment):
-        """Update an incident."""
+        """Update an incident location."""
         incident = cls.find_incident(incident_id, incident_list)
         if isinstance(incident, dict):
             for value in incident_list:
@@ -160,7 +160,7 @@ class IncidentModel(IncidentValidators):
 
     @classmethod
     def update_location(cls, incident_id, incident_list, location):
-        """Update an incident."""
+        """Update an incident location."""
         incident = cls.find_incident(incident_id, incident_list)
         if isinstance(incident, dict):
             for value in incident_list:
@@ -255,6 +255,7 @@ class User(UserValidators):
         super().__init__()
         self.email = email
         self.password = password
+        self.id = ''
 
     def sign_up(self, confirm_passowrd, users):
         """Register user.
@@ -267,6 +268,7 @@ class User(UserValidators):
            self.validate_password(confirm_passowrd):
             if self.match_password(confirm_passowrd, self.password):
                 if not self.find_user(self.email, users):
+                    self.id = len(users) + 1
                     users.append({self.email: self.describe_user()})
                     return {'status': True,
                             'message': {"Id": self.email,
@@ -280,7 +282,8 @@ class User(UserValidators):
         """Return object representation of user."""
         return {
             "Email": self.email,
-            "Password": self.password
+            "Password": self.password,
+            "Id": self.id
         }
 
     @classmethod
@@ -303,10 +306,25 @@ class User(UserValidators):
             user = self.find_user(email, users)
             if isinstance(user, dict):
                 if self.match_password(password, user['Password']):
-                    login_list.append({'Email': email})
+                    login_list.append({'Email': email, 'Id':user['Id']})
                     return {'status': True, 'message': login_list}
                 return {'status': False,
                         'message': 'Invalid password/email combination'}
             return {'status': False,
                     'message': 'User not found in our database'}
         return {'status': False, 'message': self.errors}
+
+    @classmethod
+    def logout(cls, user_id, logged_in):
+        """Log user out."""
+        if len(logged_in) != 0:
+            for user in logged_in:
+                for key, value in user.items():
+                    if str(user['Id']) == str(user_id):
+                        logged_in.remove(user)
+                        return {'status': True,
+                                'message': 'Successfuly logged out'}
+                return {'status': False,
+                        'message': 'That user is not logged in'}
+        else:
+            return {'status': False, 'message': 'That user is not logged in'}

@@ -162,3 +162,18 @@ class Signin(Resource):
         if res.get('status'):
             return {'data': {'message': res.get('message'), 'status': 200}}, 200
         return {'status': 400, 'errors': res['message']}, 400
+
+
+class Signout(Resource):
+    """Signup user."""
+
+    def __init__(self):
+        """Initialize login list."""
+        self.logged_in = logged_in
+
+    def post(self, user_id):
+        """Create user."""
+        res = User.logout(user_id, self.logged_in)
+        if res['status']:
+            return {'data': {'message': res['message'], 'status': 200}}, 200
+        return {'status': 400, 'errors': res['message']}, 400

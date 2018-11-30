@@ -11,3 +11,4 @@ api.add_resource(views.EditIncidentLocation,
                  '/incidents/<incident_id>/location')
 api.add_resource(views.Signup, '/auth/signup')
 api.add_resource(views.Signin, '/auth/login')
+api.add_resource(views.Signout, '/auth/logout/<user_id>')
