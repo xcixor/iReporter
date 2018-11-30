@@ -3,13 +3,14 @@ import unittest
 
 from app import create_app
 
-from app.api_1_0.views import users
+from app.api_1_0.views import users, logged_in
 
 
 class TestUser(unittest.TestCase):
     """Tests user's functionality."""
 
     def setUp(self):
+        """Initialize objects for testing."""
         self.user = {
             "Email": "user@example.com",
             "Password": "pass1234",
@@ -21,6 +22,7 @@ class TestUser(unittest.TestCase):
     def tearDown(self):
         """Clean up after test."""
         users.clear()
+        logged_in.clear()
 
     def test_signup_with_valid_credentials_success(self):
         """Test user can register."""
@@ -115,3 +117,30 @@ class TestUser(unittest.TestCase):
         res = res.get_json()
         self.assertEqual(res['errors'][0],
                          'Password should not be blank')
+
+    def test_user_login_with_correct_credentials_true(self):
+        """Test user can login."""
+        res = self.client().post('/api/v1/auth/signup', data=self.user)
+        self.assertEqual(res.status_code, 201)
+        logins = {
+            "Email": "user@example.com",
+            "Password": "pass1234"
+        }
+        resp = self.client().post('/api/v1/auth/login', data=logins)
+        self.assertEqual(resp.status_code, 200)
+        resp = resp.get_json()
+        self.assertIn(logins, resp['data']['message'])
+
+    def test_login_wrong_credentials_false(self):
+        """Test user cannot login with false credentials."""
+        res = self.client().post('/api/v1/auth/signup', data=self.user)
+        self.assertEqual(res.status_code, 201)
+        logins = {
+            "Email": "user@example.com",
+            "Password": "pass123"
+        }
+        resp = self.client().post('/api/v1/auth/login', data=logins)
+        self.assertEqual(res.status_code, 200)
+        resp = resp.get_json()
+        self.assertEqual(resp['data']['error'],
+                         'Invalid password/email combination')
