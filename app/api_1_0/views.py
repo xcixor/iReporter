@@ -7,6 +7,9 @@ db = []
 
 users = []
 
+logged_in = []
+
+
 class Incident(Resource):
     """Implements an Incident's endpoints."""
 
@@ -132,8 +135,30 @@ class Signup(Resource):
         parser.add_argument('Confirm Password')
         args = parser.parse_args()
 
-        user = User(args['Email'], args['Password'], args['Confirm Password'])
-        res = user.sign_up(self.users)
+        user = User(args['Email'], args['Password'])
+        res = user.sign_up(args['Confirm Password'], self.users)
         if res.get('status'):
             return {'data': {'message': res.get('message'), 'status': 201}}, 201
         return {'status': 400, 'errors': user.errors}, 400
+
+
+class Signin(Resource):
+    """Signup user."""
+
+    def __init__(self):
+        """Initialize login list."""
+        self.logged_in = logged_in
+        self.users = users
+
+    def post(self):
+        """Create user."""
+        parser = reqparse.RequestParser()
+        parser.add_argument('Email')
+        parser.add_argument('Password')
+        args = parser.parse_args()
+
+        user = User(args['Email'], args['Password'])
+        res = user.login(args['Email'], args['Password'], self.logged_in, self.users)
+        if res.get('status'):
+            return {'data': {'message': res.get('message'), 'status': 200}}, 200
+        return {'status': 400, 'errors': res['message']}, 400

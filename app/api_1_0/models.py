@@ -244,8 +244,9 @@ class UserValidators(object):
 class User(UserValidators):
     """Models a user."""
 
-    def __init__(self, email, password, confirm_password):
+    def __init__(self, email, password):
         """Initialize a user.
+
         args:
             email: user email id
             password: secret characters
@@ -254,9 +255,8 @@ class User(UserValidators):
         super().__init__()
         self.email = email
         self.password = password
-        self.confirm_passowrd = confirm_password
 
-    def sign_up(self, users):
+    def sign_up(self, confirm_passowrd, users):
         """Register user.
 
         args:
@@ -264,8 +264,8 @@ class User(UserValidators):
         """
         if self.validate_email(self.email) and \
            self.validate_password(self.password) and \
-           self.validate_password(self.confirm_passowrd):
-            if self.match_password(self.confirm_passowrd, self.password):
+           self.validate_password(confirm_passowrd):
+            if self.match_password(confirm_passowrd, self.password):
                 if not self.find_user(self.email, users):
                     users.append({self.email: self.describe_user()})
                     return {'status': True,
@@ -290,3 +290,23 @@ class User(UserValidators):
             for key, value in user.items():
                 if key == email:
                     return value
+
+    def login(self, email, password, login_list, users):
+        """Signin user.
+
+        args:
+            email: user email
+            password: user_password
+            login_list: list to save logged in user
+        """
+        if self.validate_email(email) and self.validate_password(password):
+            user = self.find_user(email, users)
+            if isinstance(user, dict):
+                if self.match_password(password, user['Password']):
+                    login_list.append({'Email': email})
+                    return {'status': True, 'message': login_list}
+                return {'status': False,
+                        'message': 'Invalid password/email combination'}
+            return {'status': False,
+                    'message': 'User not found in our database'}
+        return {'status': False, 'message': self.errors}

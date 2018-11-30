@@ -129,7 +129,7 @@ class TestUser(unittest.TestCase):
         resp = self.client().post('/api/v1/auth/login', data=logins)
         self.assertEqual(resp.status_code, 200)
         resp = resp.get_json()
-        self.assertIn(logins, resp['data']['message'])
+        self.assertDictContainsSubset(resp['data']['message'][0], logins)
 
     def test_login_wrong_credentials_false(self):
         """Test user cannot login with false credentials."""
@@ -137,10 +137,10 @@ class TestUser(unittest.TestCase):
         self.assertEqual(res.status_code, 201)
         logins = {
             "Email": "user@example.com",
-            "Password": "pass123"
+            "Password": "pass4567"
         }
         resp = self.client().post('/api/v1/auth/login', data=logins)
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(resp.status_code, 400)
         resp = resp.get_json()
-        self.assertEqual(resp['data']['error'],
+        self.assertEqual(resp['errors'],
                          'Invalid password/email combination')
