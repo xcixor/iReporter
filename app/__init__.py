@@ -17,6 +17,7 @@ def create_app(configuration):
     """
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(config[configuration])
+    app.url_map.strict_slashes = False
     config[configuration].init_app(app)
 
     # register blueprints

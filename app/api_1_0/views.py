@@ -16,18 +16,27 @@ class Incident(Resource):
     def __init__(self):
         """Initialize db."""
         self.db = db
-        # self.incident = None
 
     def post(self):
         """Send incident creation request."""
         parser = reqparse.RequestParser()
-        parser.add_argument('Created By')
-        parser.add_argument('Type')
-        parser.add_argument('Location')
+        parser.add_argument('Created By',
+                            type=str, help='Created By is required',
+                            required=True)
+        parser.add_argument('Type',
+                            type=str, help='Type is required',
+                            required=True)
+        parser.add_argument('Location', type=str,
+                            help='Location is required',
+                            required=True)
         parser.add_argument('Images', type=str)
         parser.add_argument('Video', type=str)
-        parser.add_argument('Comment')
-        parser.add_argument('Title')
+        parser.add_argument('Comment', type=str,
+                            help='Comment is required',
+                            required=True)
+        parser.add_argument('Title', type=str,
+                            help='Title is required',
+                            required=True)
         args = parser.parse_args()
         incident = IncidentModel(
             args['Created By'], args['Type'], args['Location'],
@@ -57,7 +66,10 @@ class EditIncidentComment(Resource):
     def patch(self, incident_id):
         """Edit an incidence."""
         parser = reqparse.RequestParser()
-        parser.add_argument('Comment')
+        parser.add_argument('Comment',
+                            type=str,
+                            help='Comment is required',
+                            required=True)
         args = parser.parse_args()
         validate = IncidentValidators()
         comment = args['Comment']
@@ -80,7 +92,10 @@ class EditIncidentLocation(Resource):
     def patch(self, incident_id):
         """Edit an incidence location."""
         parser = reqparse.RequestParser()
-        parser.add_argument('Location')
+        parser.add_argument('Location',
+                            type=str,
+                            help='Location is required',
+                            required=True)
         args = parser.parse_args()
         validate = IncidentValidators()
         location = args['Location']
@@ -130,9 +145,18 @@ class Signup(Resource):
     def post(self):
         """Create user."""
         parser = reqparse.RequestParser()
-        parser.add_argument('Email')
-        parser.add_argument('Password')
-        parser.add_argument('Confirm Password')
+        parser.add_argument('Email',
+                            type=str,
+                            help='Email is required',
+                            required=True)
+        parser.add_argument('Password',
+                            type=str,
+                            help='Password is required',
+                            required=True)
+        parser.add_argument('Confirm Password',
+                            type=str,
+                            help='Confirm Password is required',
+                            required=True)
         args = parser.parse_args()
 
         user = User(args['Email'], args['Password'])
@@ -153,8 +177,14 @@ class Signin(Resource):
     def post(self):
         """Create user."""
         parser = reqparse.RequestParser()
-        parser.add_argument('Email')
-        parser.add_argument('Password')
+        parser.add_argument('Email',
+                            type=str,
+                            help='Email is required',
+                            required=True)
+        parser.add_argument('Password',
+                            type=str,
+                            help='Password is required',
+                            required=True)
         args = parser.parse_args()
 
         user = User(args['Email'], args['Password'])
