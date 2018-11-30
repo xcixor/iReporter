@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/xcixor/iReporter.svg?branch=develop)](https://travis-ci.org/xcixor/iReporter)
-[![Coverage Status](https://coveralls.io/repos/github/xcixor/iReporter/badge.svg?branch=develop)](https://coveralls.io/github/xcixor/iReporter?branch=develop)
+[![Build Status](https://travis-ci.org/xcixor/iReporter.svg?branch=ft-logout-162185351)](https://travis-ci.org/xcixor/iReporter)
+[![Coverage Status](https://coveralls.io/repos/github/xcixor/iReporter/badge.svg?branch=develop)](https://coveralls.io/github/xcixor/iReporter?branch=ft-logout-162185351)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b86067db9823606adfed/maintainability)](https://codeclimate.com/github/xcixor/iReporter/maintainability)
 ## iReporter
 iReporter is an a whistle blowing application that enables people to raise concerns about issues that are affecting them to the authorities.
