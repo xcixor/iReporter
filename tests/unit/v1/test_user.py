@@ -129,7 +129,7 @@ class TestUser(unittest.TestCase):
         resp = self.client().post('/api/v1/auth/login', data=logins)
         self.assertEqual(resp.status_code, 200)
         resp = resp.get_json()
-        self.assertDictContainsSubset(resp['data']['message'][0], logins)
+        self.assertEqual(resp['data']['message'][0]['Email'], logins['Email'])
 
     def test_login_wrong_credentials_false(self):
         """Test user cannot login with false credentials."""
@@ -144,3 +144,39 @@ class TestUser(unittest.TestCase):
         resp = resp.get_json()
         self.assertEqual(resp['errors'],
                          'Invalid password/email combination')
+
+    def test_login_login_inexisting_user_false(self):
+        """Test user cannot login with false credentials."""
+        logins = {
+            "Email": "user@example.com",
+            "Password": "pass1234"
+        }
+        resp = self.client().post('/api/v1/auth/login', data=logins)
+        self.assertEqual(resp.status_code, 400)
+        resp = resp.get_json()
+        self.assertEqual(resp['errors'],
+                         'User not found in our database')
+
+    def test_logout_logged_in_user_true(self):
+        """Test user can logout."""
+        res = self.client().post('/api/v1/auth/signup', data=self.user)
+        self.assertEqual(res.status_code, 201)
+        logins = {
+            "Email": "user@example.com",
+            "Password": "pass1234"
+        }
+        resp = self.client().post('/api/v1/auth/login', data=logins)
+        self.assertEqual(resp.status_code, 200)
+        result = self.client().post('/api/v1/auth/logout/1')
+        self.assertEqual(result.status_code, 200)
+        result = result.get_json()
+        self.assertEqual(result['data']['message'],
+                         'Successfuly logged out')
+
+    def test_logout_un_logged_in_user_false(self):
+        """Test unlogged in user logout fails."""
+        resp = self.client().post('/api/v1/auth/logout/1')
+        self.assertEqual(resp.status_code, 400)
+        resp = resp.get_json()
+        self.assertEqual(resp['errors'],
+                         'That user is not logged in')
