@@ -19,12 +19,26 @@ class Development(Config):
     """Contains configurations to be used by developer."""
 
     DEBUG = True
+    db = {
+        "dbname": 'ireporter',
+        "user": 'developer',
+        "password": 'developer',
+        "host": 'localhost',
+        "port": "5432"
+    }
 
 
 class Testing(Config):
     """Contains configurations for testing."""
 
     TESTING = True
+    db = {
+        "dbname": 'test_ireporter',
+        "user": 'developer',
+        "password": 'developer',
+        "host": 'localhost',
+        "port": "5432"
+    }
 
 
 class Production(Config):

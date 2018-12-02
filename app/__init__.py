@@ -10,7 +10,7 @@ from manage import init_db
 
 
 def create_app(configuration):
-    """set up app.
+    """Set up app.
 
     args:
         configuration(str): name of configuration to use for current instace
@@ -18,11 +18,13 @@ def create_app(configuration):
         app(object): app instance
     """
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_object(config[configuration])
     app.url_map.strict_slashes = False
-    # config[configuration].init_app(app)
-    init_db()
-    print('Finished init *****')
+
+    # configure app
+    app.config.from_object(config[configuration])
+    config[configuration].init_app(app)
+    db_config = config[configuration].db
+    init_db(db_config)
 
     # register blueprints
     app.register_blueprint(v1)
