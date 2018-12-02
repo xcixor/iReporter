@@ -3,6 +3,8 @@ import datetime
 
 import re
 
+from app.utils import *
+
 
 class IncidentValidators(object):
     """Validates an Incident object data."""
@@ -31,7 +33,7 @@ class IncidentValidators(object):
     def validate_title(self, title):
         """Validate Title."""
         if not is_empty(title):
-            if re.match("^[a-zA-Z0-9 _]*$", title):
+            if not has_special_characters(title):
                 return True
             else:
                 self.errors.append(("Title cannot contain special characters"))
@@ -88,12 +90,6 @@ class IncidentValidators(object):
             return False
 
 
-def is_empty(value):
-    """Check if string is empty or whitespace."""
-    if value.isspace() or value == "":
-        return True
-
-
 class IncidentModel(IncidentValidators):
     """This class models an Incident."""
 
@@ -147,27 +143,18 @@ class IncidentModel(IncidentValidators):
                     return value
 
     @classmethod
-    def update_comment(cls, incident_id, incident_list, comment):
+    def update_resource(cls, incident_id, incident_list, **kwargs):
         """Update an incident location."""
         incident = cls.find_incident(incident_id, incident_list)
         if isinstance(incident, dict):
-            for value in incident_list:
-                for key, value in value.items():
-                    if str(key) == str(incident_id):
-                        value['Comment'] = comment
-                        return {'status': True, 'message': value['Id']}
-        return {'status': False, 'message': 'That resource cannot be found'}
-
-    @classmethod
-    def update_location(cls, incident_id, incident_list, location):
-        """Update an incident location."""
-        incident = cls.find_incident(incident_id, incident_list)
-        if isinstance(incident, dict):
-            for value in incident_list:
-                for key, value in value.items():
-                    if str(key) == str(incident_id):
-                        value['Location'] = location
-                        return {'status': True, 'message': value['Id']}
+            for update_key, update_value in kwargs.items():
+                if update_key in incident:
+                    for incident_value in incident_list:
+                        for key, value in incident_value.items():
+                            if str(key) == str(incident_id):
+                                value[update_key] = update_value
+                                print(incident_value)
+                                return {'status': True, 'message': value['Id']}
         return {'status': False, 'message': 'That resource cannot be found'}
 
     @classmethod
@@ -211,8 +198,7 @@ class UserValidators(object):
     def validate_email(self, email):
         """Validate email."""
         if not is_empty(email):
-            if re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",
-                        email):
+            if is_email(email):
                 return True
             else:
                 self.errors.append('Invalid Email Address')
@@ -224,11 +210,10 @@ class UserValidators(object):
     def validate_password(self, password):
         """Validate password."""
         if not is_empty(password):
-            if len(password) >= 8:
+            if is_valid_password(password):
                 return True
-            else:
-                self.errors.append("Password should be atleast eight characters")
-                return False
+            self.errors.append("Password should be atleast eight characters")
+            return False
         else:
             self.errors.append("Password should not be blank")
 
