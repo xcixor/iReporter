@@ -49,7 +49,8 @@ class IncidentValidators(object):
                 return True
             else:
                 self.errors.append(
-                    "Incident type should either be a 'red-flag' or 'intervention'")
+                    "Incident type should either be {}".
+                    format("a 'red-flag' or 'intervention'"))
                 return False
         else:
             self.errors.append("Incident type should not be empty")
@@ -153,7 +154,6 @@ class IncidentModel(IncidentValidators):
                         for key, value in incident_value.items():
                             if str(key) == str(incident_id):
                                 value[update_key] = update_value
-                                print(incident_value)
                                 return {'status': True, 'message': value['Id']}
         return {'status': False, 'message': 'That resource cannot be found'}
 
@@ -257,9 +257,11 @@ class User(UserValidators):
                     users.append({self.email: self.describe_user()})
                     return {'status': True,
                             'message': {"Id": self.email,
-                                        "message": "You have successfuly signed up"}}
+                                        "message":
+                                        "You have successfuly signed up"}}
                 return {'status': False,
-                        'message': self.errors.append("That email is already taken")}
+                        'message': self.errors.
+                        append("That email is already taken")}
             return {'status': False, 'message': {'errors': self.errors}}
         return {'status': False, 'message': {'errors': self.errors}}
 
@@ -307,7 +309,8 @@ class User(UserValidators):
             for user in logged_in:
                 # loop through the values of a dictionary in the list
                 for key, value in user.items():
-                    # check if string equivalents dict\'s Id and passed is match
+                    # check if string equivalents dict\'s Id and passed
+                    # is match
                     if str(user['Id']) == str(user_id):
                         logged_in.remove(user)
                         return {'status': True,

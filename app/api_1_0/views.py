@@ -77,9 +77,11 @@ class EditIncidentComment(Resource):
             comment = args['Comment']
         else:
             return {'status': 400, 'error': validate.errors}, 400
-        res = IncidentModel.update_resource(incident_id, self.db, Comment=comment)
+        res = IncidentModel.update_resource(incident_id, self.db,
+                                            Comment=comment)
         if res['status']:
-            return {'status': 200, 'data': {'Id': res['message'], 'message': 'Updated red-flag record’s comment'}}, 200
+            return {'status': 200, 'data': {'Id': res['message'],
+                    'message': 'Updated red-flag record’s comment'}}, 200
         return {'status': 404, 'error': res['message']}, 404
 
 
@@ -104,9 +106,11 @@ class EditIncidentLocation(Resource):
         else:
             return {'status': 400, 'error': validate.errors}, 400
 
-        res = IncidentModel.update_resource(incident_id, self.db, Location=location)
+        res = IncidentModel.update_resource(incident_id, self.db,
+                                            Location=location)
         if res['status']:
-            return {'status': 200, 'data': {'Id': res['message'], 'message': 'Updated incident location'}}, 200
+            return {'status': 200, 'data': {'Id': res['message'],
+                                            'message': 'Updated incident location'}}, 200
         return {'status': 404, 'error': res['message']}, 404
 
 
@@ -188,7 +192,8 @@ class Signin(Resource):
         args = parser.parse_args()
 
         user = User(args['Email'], args['Password'])
-        res = user.login(args['Email'], args['Password'], self.logged_in, self.users)
+        res = user.login(args['Email'], args['Password'], self.logged_in,
+                         self.users)
         if res.get('status'):
             return {'data': {'message': res.get('message'), 'status': 200}}, 200
         return {'status': 400, 'errors': res['message']}, 400
