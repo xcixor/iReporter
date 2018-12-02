@@ -303,8 +303,11 @@ class User(UserValidators):
     def logout(cls, user_id, logged_in):
         """Log user out."""
         if len(logged_in) != 0:
+            # loop through the list of users
             for user in logged_in:
+                # loop through the values of a dictionary in the list
                 for key, value in user.items():
+                    # check if string equivalents dict\'s Id and passed is match
                     if str(user['Id']) == str(user_id):
                         logged_in.remove(user)
                         return {'status': True,
