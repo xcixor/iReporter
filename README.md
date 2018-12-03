@@ -17,7 +17,7 @@ Poor services in the private and public sector, increasing national debt and poo
 - Postgres
 - HTML, CSS
 - Javascript
-## Setting up app for development
+## Installation
 => This setup assumes you are using a linux based OS
 ### Step #1
 - Create the directory where you want to clone the repository. For this purpose I shall use ireporter
@@ -25,18 +25,20 @@ Poor services in the private and public sector, increasing national debt and poo
 - mkdir ireporter
 - cd ireporter/
 - git clone https://github.com/xcixor/iReporter.git
-## Step #2 create a virtual environment and install the requirements
+### Step #2 create a virtual environment and install the requirements
 - python3 -m venv ireporter
 - source ireporter/bin/activate (to activate virtual env)
 - pip install -r requirements.txt (install app dependencies)
-## Step #3 set up .env variables
+### Step #3 set up .env variables
 - There are no variable at the moment
-## Step #4 start the app
+### Step #4 start the app
 - To start the app run the command below
 - - python run.py
-## Step 5 Test
+- - Test the endpoints in the next section with Postman
+## Testing
 - To test the app run the command below
 - - py.test --cov=app test/ (to test and give coverage)
+- You should see an image like below
 ### Endpoints
 |Resource urls                                    | Method     | Description               |
 |-------------------------------------------------|------------|---------------------------|
@@ -64,3 +66,6 @@ The app is hosted at [heroku](https://i-reporter.herokuapp.com/api/v1)
 The documentation can be found [here](https://ireporter.docs.apiary.io/)
 
 The Front end is hosted [here](https://xcixor.github.io/iReporter/)
+
+## Owner
+This app was built by [pndungu54@gmail.com](https://github.com/xcixor)
