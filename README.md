@@ -33,8 +33,8 @@ Poor services in the private and public sector, increasing national debt and poo
 - There are no variable at the moment
 ### Step #4 start the app
 - To start the app run the command below
-- - python run.py
-- - Test the endpoints in the next section with Postman
+- python run.py
+- Test the endpoints in the next section with Postman
 ## Testing
 - To test the app run the command below
 - - py.test --cov=app test/ (to test and give coverage)
@@ -43,12 +43,12 @@ Poor services in the private and public sector, increasing national debt and poo
 ### Endpoints
 |Resource urls                                    | Method     | Description               |
 |-------------------------------------------------|------------|---------------------------|
-| /api/v1/incident                                |   POST     | Create an Incident        |
-| /api/v1/incident                                |   GET      | Get all incidences        |
-| /api/v1/incident/id                             |   GET      | Get an Incident by Id     |
-| /api/v1/incident/id                             |   DELETE   | Delete an incident        |
-| /api/v1/incident/id/comments                    |   PATCH    | Edit an incident comment  |
-| /api/v1/incident/id/location                    |   PATCH    | Edit an incident location |
+| /api/v1/incidents                               |   POST     | Create an Incident        |
+| /api/v1/incidents                               |   GET      | Get all incidences        |
+| /api/v1/incidents/id                            |   GET      | Get an Incident by Id     |
+| /api/v1/incidents/id                            |   DELETE   | Delete an incident        |
+| /api/v1/incidents/id/comments                   |   PATCH    | Edit an incident comment  |
+| /api/v1/incidents/id/location                   |   PATCH    | Edit an incident location |
 | /api/v1/auth/signup                             |   POST     | Signup a user             |
 | /api/v1/auth/login                              |   POST     | Login a user              |
 | /api/v1/auth/logout                             |   POST     | Sigout a user             |
