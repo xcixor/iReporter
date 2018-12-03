@@ -39,6 +39,7 @@ Poor services in the private and public sector, increasing national debt and poo
 - To test the app run the command below
 - - py.test --cov=app test/ (to test and give coverage)
 - You should see an image like below
+![alt Tests image](/repo_images/test.png)
 ### Endpoints
 |Resource urls                                    | Method     | Description               |
 |-------------------------------------------------|------------|---------------------------|
