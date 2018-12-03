@@ -27,10 +27,10 @@ def init_db(db_config):
 
 def create_tables(db_config):
     """Create tables."""
-    conn = connect(db_config)
-    cursor = conn.cursor()
     tables = table_queries()
     try:
+        conn = connect(db_config)
+        cursor = conn.cursor()
         for table in tables:
             cursor.execute(table)
             conn.commit()
