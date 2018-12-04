@@ -18,23 +18,36 @@ Poor services in the private and public sector, increasing national debt and poo
 - HTML, CSS
 - Javascript
 ## Installation
-=> This setup assumes you are using a linux based OS
+=> This setup assumes you are using a unix based OS
 ### Step #1
 - Create the directory where you want to clone the repository. For this purpose I shall use ireporter
 - move into that directory and clone the repository as shown below
-- mkdir ireporter
-- cd ireporter/
-- git clone https://github.com/xcixor/iReporter.git
+-     mkdir ireporter
+-     cd ireporter/
+-     git clone https://github.com/xcixor/iReporter.git
 ### Step #2 create a virtual environment and install the requirements
 - python3 -m venv ireporter
 - source ireporter/bin/activate (to activate virtual env)
 - pip install -r requirements.txt (install app dependencies)
-### Step #3 set up .env variables
-- There are no variable at the moment
-### Step #4 start the app
-- To start the app run the command below
-- - python run.py
-- - Test the endpoints in the next section with Postman
+### Step #3: Set up Postgres locally on your machine and create a database
+You can install Postgres for ubuntu 16.04 [here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04) or for mac [here](https://medium.com/@Umesh_Kafle/postgresql-and-postgis-installation-in-mac-os-87fa98a6814d). Create a Postgres user and password and create a database.
+
+### Step #4 set up .env variables
+- Some data is required by the application to run. This includes database setup and as the data varies from
+  development environment to the other, its placed on the .env file. The variables are set as below.
+    - create the .env file
+    - open the file in the editor add the following information
+        - export HOST="localhost"
+        - export PORT="5432"
+        - export DATABASE_NAME=the db to use during development
+        - export USER=the user of the password
+        - export PASSWORD=password of postgres user
+    - run the following command to activate the environment variables
+        -       source .env
+### Step #5 start the app
+To start the app run the command below
+-     python run.py
+Test the endpoints in the next section with Postman
 ## Testing
 - To test the app run the command below
 - - py.test --cov=app test/ (to test and give coverage)
@@ -43,12 +56,12 @@ Poor services in the private and public sector, increasing national debt and poo
 ### Endpoints
 |Resource urls                                    | Method     | Description               |
 |-------------------------------------------------|------------|---------------------------|
-| /api/v1/incident                                |   POST     | Create an Incident        |
-| /api/v1/incident                                |   GET      | Get all incidences        |
-| /api/v1/incident/id                             |   GET      | Get an Incident by Id     |
-| /api/v1/incident/id                             |   DELETE   | Delete an incident        |
-| /api/v1/incident/id/comments                    |   PATCH    | Edit an incident comment  |
-| /api/v1/incident/id/location                    |   PATCH    | Edit an incident location |
+| /api/v1/redflags                                |   POST     | Create a redflag          |
+| /api/v1/redflags                                |   GET      | Get all redflags          |
+| /api/v1/redflags/id                             |   GET      | Get a redflag by Id       |
+| /api/v1/redflags/id                             |   DELETE   | Delete a redflag         |
+| /api/v1/redflags/id/comments                    |   PATCH    | Edit a redflag comment   |
+| /api/v1/redflags/id/location                    |   PATCH    | Edit a redflag location  |
 | /api/v1/auth/signup                             |   POST     | Signup a user             |
 | /api/v1/auth/login                              |   POST     | Login a user              |
 | /api/v1/auth/logout                             |   POST     | Sigout a user             |

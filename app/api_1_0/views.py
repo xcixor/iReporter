@@ -1,7 +1,7 @@
 """Api endpoint implementation."""
 from flask_restful import Resource, reqparse
 
-from app.api_1_0.models import IncidentModel, IncidentValidators, User
+from app.api_1_0.models import RedFlagModel, RedFlagValidators, User
 
 db = []
 
@@ -10,21 +10,18 @@ users = []
 logged_in = []
 
 
-class Incident(Resource):
-    """Implements an Incident's endpoints."""
+class RedFlag(Resource):
+    """Implements an RedFlag's endpoints."""
 
     def __init__(self):
         """Initialize db."""
         self.db = db
 
     def post(self):
-        """Send incident creation request."""
+        """Send redflag creation request."""
         parser = reqparse.RequestParser()
         parser.add_argument('Created By',
                             type=str, help='Created By is required',
-                            required=True)
-        parser.add_argument('Type',
-                            type=str, help='Type is required',
                             required=True)
         parser.add_argument('Location', type=str,
                             help='Location is required',
@@ -38,46 +35,46 @@ class Incident(Resource):
                             help='Title is required',
                             required=True)
         args = parser.parse_args()
-        incident = IncidentModel(
-            args['Created By'], args['Type'], args['Location'],
+        redflag = RedFlagModel(
+            args['Created By'], args['Location'],
             args['Title'], args['Comment'])
-        res = incident.save(db)
+        res = redflag.save(db)
         if res['status']:
             return {'status': 201, 'data': res['message']}, 201
-        incident_validation_errors = res['message']['errors'].copy()
-        incident.errors.clear()
-        return {'status': 400, 'errors': incident_validation_errors}, 400
+        redflag_validation_errors = res['message']['errors'].copy()
+        redflag.errors.clear()
+        return {'status': 400, 'errors': redflag_validation_errors}, 400
 
     def get(self):
-        """Return all created incidents."""
+        """Return all created redflags."""
         if len(self.db) != 0:
             return {'status': 200, 'data': self.db}, 200
         else:
-            return {'data': "There are no incidences at the moment",
+            return {'data': "There are no redflags at the moment",
                     'status': 404}, 404
 
 
-class EditIncidentComment(Resource):
-    """Edit incident comment."""
+class EditRedFlagComment(Resource):
+    """Edit RedFlag comment."""
 
     def __init__(self):
         self.db = db
 
-    def patch(self, incident_id):
-        """Edit an incidence."""
+    def patch(self, redflag_id):
+        """Edit an redflag."""
         parser = reqparse.RequestParser()
         parser.add_argument('Comment',
                             type=str,
                             help='Comment is required',
                             required=True)
         args = parser.parse_args()
-        validate = IncidentValidators()
+        validate = RedFlagValidators()
         comment = args['Comment']
         if validate.validate_comment(args['Comment']):
             comment = args['Comment']
         else:
             return {'status': 400, 'error': validate.errors}, 400
-        res = IncidentModel.update_resource(incident_id, self.db,
+        res = RedFlagModel.update_resource(redflag_id, self.db,
                                             Comment=comment)
         if res['status']:
             return {'status': 200, 'data': {'Id': res['message'],
@@ -85,56 +82,56 @@ class EditIncidentComment(Resource):
         return {'status': 404, 'error': res['message']}, 404
 
 
-class EditIncidentLocation(Resource):
-    """Edit Incident location."""
+class EditRedFlagLocation(Resource):
+    """Edit RedFlag location."""
 
     def __init__(self):
         self.db = db
 
-    def patch(self, incident_id):
-        """Edit an incidence location."""
+    def patch(self, redflag_id):
+        """Edit an redflag location."""
         parser = reqparse.RequestParser()
         parser.add_argument('Location',
                             type=str,
                             help='Location is required',
                             required=True)
         args = parser.parse_args()
-        validate = IncidentValidators()
+        validate = RedFlagValidators()
         location = args['Location']
         if validate.validate_location(args['Location']):
             location = args['Location']
         else:
             return {'status': 400, 'error': validate.errors}, 400
 
-        res = IncidentModel.update_resource(incident_id, self.db,
+        res = RedFlagModel.update_resource(redflag_id, self.db,
                                             Location=location)
         if res['status']:
             return {'status': 200, 'data': {'Id': res['message'],
-                                            'message': 'Updated incident location'}}, 200
+                                            'message': 'Updated redflag location'}}, 200
         return {'status': 404, 'error': res['message']}, 404
 
 
-class IncidentManipulation(Resource):
-    """Manage incidents."""
+class RedFlagManipulation(Resource):
+    """Manage redflags."""
 
     def __init__(self):
         """Initialize db."""
         self.db = db
 
-    def get(self, incident_id):
-        """Get a specefic incident."""
-        incident = IncidentModel.find_incident(incident_id, self.db)
-        if isinstance(incident, dict):
-            return {'status': 200, 'data': incident}, 200
+    def get(self, redflag_id):
+        """Get a specefic redflag."""
+        redflag = RedFlagModel.find_redflag(redflag_id, self.db)
+        if isinstance(redflag, dict):
+            return {'status': 200, 'data': redflag}, 200
         else:
             return {'status': 404, 'error': 'That resource cannot be found'}, 404
 
-    def delete(self, incident_id):
-        """Delete an incident."""
-        res = IncidentModel.delete_incident(incident_id, self.db)
+    def delete(self, redflag_id):
+        """Delete an redflag."""
+        res = RedFlagModel.delete_redflag(redflag_id, self.db)
         if res:
             return {'status': 200,
-                    'data': "Incident successfuly deleted"}, 200
+                    'data': "redflag successfuly deleted"}, 200
         return {'status': 404, 'error':
                 'That resource cannot be found'}, 404
 

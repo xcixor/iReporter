@@ -6,8 +6,8 @@ import re
 from app.utils import *
 
 
-class IncidentValidators(object):
-    """Validates an Incident object data."""
+class RedFlagValidators(object):
+    """Validates a RedFlag object data."""
 
     def __init__(self):
         """Initialize validator with empty errors list."""
@@ -27,7 +27,7 @@ class IncidentValidators(object):
                 self.errors.append("Created by should be an Integer")
                 return False
         else:
-            self.errors.append("Incident owner should not be blank")
+            self.errors.append("redflag owner should not be blank")
             return False
 
     def validate_title(self, title):
@@ -39,21 +39,6 @@ class IncidentValidators(object):
                 self.errors.append(("Title cannot contain special characters"))
         else:
             self.errors.append("Title cannot be empty")
-            return False
-
-    def validate_incident_type(self, incident_type):
-        """Validate the incident type."""
-        if not is_empty(incident_type):
-            incident_types = ["red-flag", "intervention"]
-            if incident_type in incident_types:
-                return True
-            else:
-                self.errors.append(
-                    "Incident type should either be {}".
-                    format("a 'red-flag' or 'intervention'"))
-                return False
-        else:
-            self.errors.append("Incident type should not be empty")
             return False
 
     def validate_location(self, location):
@@ -91,24 +76,22 @@ class IncidentValidators(object):
             return False
 
 
-class IncidentModel(IncidentValidators):
-    """This class models an Incident."""
+class RedFlagModel(RedFlagValidators):
+    """This class models an RedFlag."""
 
-    def __init__(self, created_by, incident_type, location, title, comment):
-        """Initialize an Incident object.
+    def __init__(self, created_by, location, title, comment):
+        """Initialize an redflag object.
 
         args:
-            created_by(str): incident owner
-            type(str): either of intervention or red-flag
+            created_by(str): redflag owner
             location(str): longituted, latitude coordinates
             status(str): draft, under investigation, resolved or rejected
-            comment(str): A description of the incident
+            comment(str): A description of the redflag
         """
         super().__init__()
         self.id = ''
         self.created_by = created_by
         self.created_on = datetime.datetime.now()
-        self.incident_type = incident_type
         self.location = location
         self.status = ''
         self.title = title
@@ -118,66 +101,64 @@ class IncidentModel(IncidentValidators):
         self.videos = []
 
     def save(self, db):
-        """Save incident to db.
+        """Save redflag to db.
 
         args:
-            db(list): The list into which to save the incident.
+            db(list): The list into which to save the redflag.
         """
         if self.validate_creator(self.created_by) and \
-           self.validate_incident_type(self.incident_type) and \
            self.validate_location(self.location) and \
            self.validate_comment(self.comment) and \
            self.validate_title(self.title):
             self.id = len(db) + 1
-            db.append({self.id: self.describe_incident()})
+            db.append({self.id: self.describe_redflag()})
             return {'status': True, 'message': {"Id": self.id,
-                    "message": "Successfuly created incident"}}
+                    "message": "Successfuly created redflag"}}
         else:
             return {'status': False, 'message': {'errors': self.errors}}
 
     @classmethod
-    def find_incident(cls, incident_id, incident_list):
-        """Retrieve an incident."""
-        for incident in incident_list:
-            for key, value in incident.items():
-                if str(key) == str(incident_id):
+    def find_redflag(cls, redflag_id, redflag_list):
+        """Retrieve an redflag."""
+        for redflag in redflag_list:
+            for key, value in redflag.items():
+                if str(key) == str(redflag_id):
                     return value
 
     @classmethod
-    def update_resource(cls, incident_id, incident_list, **kwargs):
-        """Update an incident location."""
-        incident = cls.find_incident(incident_id, incident_list)
-        if isinstance(incident, dict):
+    def update_resource(cls, redflag_id, redflag_list, **kwargs):
+        """Update an redflag location."""
+        redflag = cls.find_redflag(redflag_id, redflag_list)
+        if isinstance(redflag, dict):
             for update_key, update_value in kwargs.items():
-                if update_key in incident:
-                    for incident_value in incident_list:
-                        for key, value in incident_value.items():
-                            if str(key) == str(incident_id):
+                if update_key in redflag:
+                    for redflag_value in redflag_list:
+                        for key, value in redflag_value.items():
+                            if str(key) == str(redflag_id):
                                 value[update_key] = update_value
                                 return {'status': True, 'message': value['Id']}
         return {'status': False, 'message': 'That resource cannot be found'}
 
     @classmethod
-    def delete_incident(cls, incident_id, incident_list):
-        """Delete an incident."""
-        for incident in incident_list:
-            for key, value in incident.items():
-                if str(key) == str(incident_id):
-                    incident_list.remove(incident)
+    def delete_redflag(cls, redflag_id, redflag_list):
+        """Delete an redflag."""
+        for redflag in redflag_list:
+            for key, value in redflag.items():
+                if str(key) == str(redflag_id):
+                    redflag_list.remove(redflag)
                     return True
 
-    def describe_incident(self):
+    def describe_redflag(self):
         """Return the object description.
 
         returns:
-            dict: Incident properties
+            dict: redflag properties
 
         """
         return {
             'Id': self.id,
             'Created By': int(self.created_by),
             'Date Created': str(self.created_on),
-            'Type': self.incident_type,
             'Location': self.location,
             'Status': self.status,
             'Comment': self.comment,
