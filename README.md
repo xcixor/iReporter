@@ -30,25 +30,34 @@ Poor services in the private and public sector, increasing national debt and poo
 - source ireporter/bin/activate (to activate virtual env)
 - pip install -r requirements.txt (install app dependencies)
 ### Step #3 set up .env variables
-- There are no variable at the moment
-### Step #4 start the app
+- Some data is required by the application to run. This includes database setup and as the data varies from
+  development environment to the other, its placed on the .env file. The variables are set as below.
+    - crete the .env file
+    - open the file in the editor add the following information
+        export HOST="localhost"
+        export PORT="5432"
+        export DATABASE_NAME=<the db to use during development>
+        export USER=<the user of the password>
+        export PASSWORD=<password of postgres user>
+    - run the following command to activate the environment variables
+        -       source .env
 - To start the app run the command below
-- - python run.py
-- - Test the endpoints in the next section with Postman
+- python run.py
+- Test the endpoints in the next section with Postman
 ## Testing
 - To test the app run the command below
-- - py.test --cov=app test/ (to test and give coverage)
+-        py.test --cov=app test/ (to test and give coverage)
 - You should see an image like below
 ![alt Tests image](/repo_images/test.png)
 ### Endpoints
 |Resource urls                                    | Method     | Description               |
 |-------------------------------------------------|------------|---------------------------|
-| /api/v1/incident                                |   POST     | Create an Incident        |
-| /api/v1/incident                                |   GET      | Get all incidences        |
-| /api/v1/incident/id                             |   GET      | Get an Incident by Id     |
-| /api/v1/incident/id                             |   DELETE   | Delete an incident        |
-| /api/v1/incident/id/comments                    |   PATCH    | Edit an incident comment  |
-| /api/v1/incident/id/location                    |   PATCH    | Edit an incident location |
+| /api/v1/incidents                               |   POST     | Create an Incident        |
+| /api/v1/incidents                               |   GET      | Get all incidences        |
+| /api/v1/incidents/id                            |   GET      | Get an Incident by Id     |
+| /api/v1/incidents/id                            |   DELETE   | Delete an incident        |
+| /api/v1/incidents/id/comments                   |   PATCH    | Edit an incident comment  |
+| /api/v1/incidents/id/location                   |   PATCH    | Edit an incident location |
 | /api/v1/auth/signup                             |   POST     | Signup a user             |
 | /api/v1/auth/login                              |   POST     | Login a user              |
 | /api/v1/auth/logout                             |   POST     | Sigout a user             |
