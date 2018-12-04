@@ -1,2 +1,11 @@
 env/*
 .vscode/settings.json
+__pycache__/
+app/__pycache__/
+app/api_1_0/__pycache__/
+instance/__pycache__/
+specs.txt
+tests/__pycache__/
+tests/unit/__pycache__/
+tests/unit/app/__pycache__/
+tests/unit/v1/__pycache__/
