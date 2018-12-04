@@ -20,11 +20,11 @@ class Development(Config):
 
     DEBUG = True
     db = {
-        "dbname": 'ireporter',
-        "user": 'developer',
-        "password": 'developer',
-        "host": 'localhost',
-        "port": "5432"
+        "dbname": os.getenv('dbname'),
+        "user": os.getenv('user'),
+        "password": os.getenv('password'),
+        "host": os.getenv('host'),
+        "port": os.getenv('port')
     }
 
 
@@ -33,11 +33,11 @@ class Testing(Config):
 
     TESTING = True
     db = {
-        "dbname": 'test_ireporter',
-        "user": 'developer',
-        "password": 'developer',
-        "host": 'localhost',
-        "port": "5432"
+        "dbname": os.getenv('test_dbname'),
+        "user": os.getenv('user'),
+        "password": os.getenv('password'),
+        "host": os.getenv('host'),
+        "port": os.getenv('port')
     }
 
 
