@@ -45,9 +45,9 @@ You can install Postgres for ubuntu 16.04 [here](https://www.digitalocean.com/co
     - run the following command to activate the environment variables
         -       source .env
 ### Step #5 start the app
-To start the app run the command below
--     python run.py
-Test the endpoints in the next section with Postman
+- To start the app run the command below
+- python run.py
+- Test the endpoints in the next section with Postman
 ## Testing
 - To test the app run the command below
 - - py.test --cov=app test/ (to test and give coverage)
