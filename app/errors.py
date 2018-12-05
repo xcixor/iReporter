@@ -1,7 +1,5 @@
 """Contains custom error messages."""
 
-from flask_restful import HTTPException
-
 
 def bad_request(msg):
     """Request not processed by server due to client error.
@@ -73,4 +71,3 @@ def conflict(msg):
         status code(int): The failure status code
     """
     return {'error': msg, 'status': 409}, 409
-

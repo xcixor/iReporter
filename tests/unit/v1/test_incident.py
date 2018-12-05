@@ -3,7 +3,7 @@ import unittest
 
 from app import create_app
 
-from app.api_1_0.views import db
+from app.api_1_0.views import DB
 
 
 class TestRecord(unittest.TestCase):
@@ -23,7 +23,7 @@ class TestRecord(unittest.TestCase):
     def tearDown(self):
         """Remove instance variables."""
         del self.redflag
-        db.clear()
+        DB.clear()
 
     def test_create_redflag_with_valid_data_true(self):
         """Test an redflag can be created successfuly."""
@@ -44,7 +44,7 @@ class TestRecord(unittest.TestCase):
         res = self.client().post('/api/v1/redflags', data=redflag)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
-        self.assertEqual(res['errors'][0], 'Two coordinates required')
+        self.assertEqual(res['error'][0], 'Two coordinates required')
 
     def test_create_redflag_with_non_floating_point_values_false(self):
         """Test redflag coordinates are floating point values."""
@@ -58,7 +58,7 @@ class TestRecord(unittest.TestCase):
         res = self.client().post('/api/v1/redflags', data=redflag)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
-        self.assertEqual(res['errors'][0],
+        self.assertEqual(res['error'][0],
                          'Coordinates should be floating point values')
 
     def test_create_redflag_without_created_by_false(self):
@@ -73,8 +73,9 @@ class TestRecord(unittest.TestCase):
         res = self.client().post('/api/v1/redflags', data=redflag)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
-        self.assertEqual(res['errors'][0],
-                         'redflag owner should not be blank')
+        print(res)
+        self.assertEqual(res['message']['Created By'],
+                         'Created By is required')
 
     def test_create_redflag_without_location_false(self):
         """Test user cannot create redflag without location."""
@@ -88,9 +89,8 @@ class TestRecord(unittest.TestCase):
         res = self.client().post('/api/v1/redflags', data=redflag)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
-        self.assertEqual(res['errors'][0],
+        self.assertEqual(res['error'][0],
                          'Location should not be empty')
-
 
     def test_create_redflag_without_comment_false(self):
         """Test cannot create redflag without comments."""
@@ -104,7 +104,7 @@ class TestRecord(unittest.TestCase):
         res = self.client().post('/api/v1/redflags', data=redflag)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
-        self.assertEqual(res['errors'][0],
+        self.assertEqual(res['error'][0],
                          'Comments cannot be empty')
 
     def test_create_redflag_without_title_false(self):
@@ -112,30 +112,45 @@ class TestRecord(unittest.TestCase):
         redflag = {
             "Created By": 1,
             "Location": "23.5, 34.6",
-            "Comment": "Officers in this office are taking....",
+            "Comment": "Officers in this office are taking bribes",
             "Title": ""
         }
 
         res = self.client().post('/api/v1/redflags', data=redflag)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
-        self.assertEqual(res['errors'][0],
+        self.assertEqual(res['error'][0],
                          'Title cannot be empty')
 
-    def test_create_redflag_without_special_characters_title_false(self):
+    def test_create_redflag_with_special_characters_title_false(self):
         """Test cannot create redflag with special characters title."""
         redflag = {
             "Created By": 1,
             "Location": "23.5, 34.6",
-            "Comment": "Officers in this office are taking....",
+            "Comment": "Officers in this office are taking...",
             "Title": "***&&&&"
         }
 
         res = self.client().post('/api/v1/redflags', data=redflag)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
-        self.assertEqual(res['errors'][0],
+        self.assertEqual(res['error'][0],
                          'Title cannot contain special characters')
+
+    def test_create_redflag_with_special_characters_comment_false(self):
+        """Test cannot create redflag with special characters title."""
+        redflag = {
+            "Created By": 1,
+            "Location": "23.5, 34.6",
+            "Comment": "***$$###",
+            "Title": "A title."
+        }
+
+        res = self.client().post('/api/v1/redflags', data=redflag)
+        self.assertEqual(res.status_code, 400)
+        res = res.get_json()
+        self.assertEqual(res['error'][0],
+                         'Comments cannot contain special characters')
 
     def test_create_redflag_with_non_integer_created_by_id_false(self):
         """Test created by Id is an integer."""
@@ -149,7 +164,8 @@ class TestRecord(unittest.TestCase):
         res = self.client().post('/api/v1/redflags', data=redflag)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
-        self.assertEqual(res['errors'][0], "Created by should be an Integer")
+        self.assertEqual(res['message']['Created By'],
+                         'Created By is required')
 
     def test_get_existing_redflag_true(self):
         """Test can get existing record."""
@@ -163,10 +179,9 @@ class TestRecord(unittest.TestCase):
     def test_get_non_existing_redflag_false(self):
         """Test cannot get non existing redflag."""
         res = self.client().get('/api/v1/redflags/5')
-        print(res.get_json())
         self.assertEqual(res.status_code, 404)
         res = res.get_json()
-        self.assertEqual(res['error'], "That resource cannot be found")
+        self.assertEqual(res['error'], "That redflag cannot be found")
 
     def test_get_all_redflags_true(self):
         """Test user can get all redflags."""
@@ -188,10 +203,7 @@ class TestRecord(unittest.TestCase):
     def test_get_non_existing_redflags_false(self):
         """Test app doesn't crash if there are no redflags."""
         result = self.client().get('/api/v1/redflags')
-        self.assertEqual(result.status_code, 404)
-        result = result.get_json()
-        self.assertEqual(result['data'],
-                         "There are no redflags at the moment")
+        self.assertEqual(result.status_code, 204)
 
     def test_delete_existing_redflag_true(self):
         """Test user can delete an redflag successfuly."""
@@ -209,7 +221,7 @@ class TestRecord(unittest.TestCase):
         self.assertEqual(result.status_code, 404)
         result = result.get_json()
         self.assertEqual(
-            result['error'], "That resource cannot be found")
+            result['error'], "That redflag cannot be found")
 
     def test_edit_existing_record_comment_true(self):
         """Test user can edit an redflags."""
@@ -218,10 +230,12 @@ class TestRecord(unittest.TestCase):
         edit_data = {
             "Comment": "Clerks are taking bribes"
         }
-        res = self.client().patch('/api/v1/redflags/1/comments', data=edit_data)
+        res = self.client().patch('/api/v1/redflags/1/comments',
+                                  data=edit_data)
         self.assertEqual(res.status_code, 200)
         res = res.get_json()
-        self.assertEqual(res['data']['message'], "Updated red-flag record’s comment")
+        self.assertEqual(res['data']['message'],
+                         'Updated red-flag record’s comment')
 
     def test_edit_existing_record_with_blank_comment_false(self):
         """Test user cannot edit an redflag comment without a comment."""
@@ -230,7 +244,8 @@ class TestRecord(unittest.TestCase):
         edit_data = {
             "Comment": ""
         }
-        res = self.client().patch('/api/v1/redflags/1/comments', data=edit_data)
+        res = self.client().patch('/api/v1/redflags/1/comments',
+                                  data=edit_data)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
         self.assertEqual(res['error'][0], "Comments cannot be empty")
@@ -240,20 +255,23 @@ class TestRecord(unittest.TestCase):
         edit_data = {
             "Comment": "Clerks are taking bribes"
         }
-        res = self.client().patch('/api/v1/redflags/1/comments', data=edit_data)
+        res = self.client().patch('/api/v1/redflags/1/comments',
+                                  data=edit_data)
         self.assertEqual(res.status_code, 404)
         res = res.get_json()
         self.assertEqual(
-            res['error'], "That resource cannot be found")
+            res['error'], "That redflag cannot be found")
 
     def test_edit_existing_record_location_true(self):
         """Test user can edit an redflags."""
-        res = self.client().post('/api/v1/redflags', data=self.redflag)
+        res = self.client().post('/api/v1/redflags',
+                                 data=self.redflag)
         self.assertEqual(res.status_code, 201)
         edit_data = {
             "Location": "23.4, 23.6"
         }
-        res = self.client().patch('/api/v1/redflags/1/location', data=edit_data)
+        res = self.client().patch('/api/v1/redflags/1/location',
+                                  data=edit_data)
         self.assertEqual(res.status_code, 200)
         res = res.get_json()
         self.assertEqual(res['data']['message'],
@@ -264,11 +282,12 @@ class TestRecord(unittest.TestCase):
         edit_data = {
             "Location": "23.4, 23.6"
         }
-        res = self.client().patch('/api/v1/redflags/1/location', data=edit_data)
+        res = self.client().patch('/api/v1/redflags/1/location',
+                                  data=edit_data)
         self.assertEqual(res.status_code, 404)
         res = res.get_json()
         self.assertEqual(
-            res['error'], "That resource cannot be found")
+            res['error'], "That redflag cannot be found")
 
     def test_edit_record_with_invalid_location_false(self):
         """Test user cannot edit location with invalid location."""
@@ -277,7 +296,8 @@ class TestRecord(unittest.TestCase):
         edit_data = {
             "Location": "23.io, lat"
         }
-        res = self.client().patch('/api/v1/redflags/1/location', data=edit_data)
+        res = self.client().patch('/api/v1/redflags/1/location',
+                                  data=edit_data)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
         self.assertEqual(res['error'][0],
@@ -285,12 +305,14 @@ class TestRecord(unittest.TestCase):
 
     def test_edit_record_with_only_one_location_false(self):
         """Test user cannot edit location with invalid location."""
-        res = self.client().post('/api/v1/redflags', data=self.redflag)
+        res = self.client().post('/api/v1/redflags',
+                                 data=self.redflag)
         self.assertEqual(res.status_code, 201)
         edit_data = {
             "Location": "23.7"
         }
-        res = self.client().patch('/api/v1/redflags/1/location', data=edit_data)
+        res = self.client().patch('/api/v1/redflags/1/location',
+                                  data=edit_data)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
         self.assertEqual(res['error'][0],
@@ -303,7 +325,8 @@ class TestRecord(unittest.TestCase):
         edit_data = {
             "Location": ""
         }
-        res = self.client().patch('/api/v1/redflags/1/location', data=edit_data)
+        res = self.client().patch('/api/v1/redflags/1/location',
+                                  data=edit_data)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
         self.assertEqual(res['error'][0],

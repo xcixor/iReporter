@@ -1,6 +1,6 @@
 """Defines the routes of the api."""
 
-from app.api_1_0 import api
+from app.api_1_0 import API as api
 from app.api_1_0 import views
 
 api.add_resource(views.RedFlag, '/redflags')

@@ -1,12 +1,10 @@
 """Contains the models for the data."""
 import datetime
-
-import re
-
-from app.utils import *
+from app.utils import is_email, is_empty, is_valid_password
+from app.utils import has_special_characters
 
 
-class RedFlagValidators(object):
+class RedFlagValidators():
     """Validates a RedFlag object data."""
 
     def __init__(self):
@@ -15,31 +13,29 @@ class RedFlagValidators(object):
 
     def validate_creator(self, creator):
         """Verify and set created_by."""
-        if not is_empty(creator):
-            created_by = ''
-            try:
-                created_by = int(creator)
-            except:
-                created_by = None
-            if created_by is not None:
+        if creator:
+            created_by = creator
+            # try:
+            #     created_by = int(creator)
+            # except TypeError:
+            #     created_by = None
+            # if created_by is not None:
+            #     return True
+            if isinstance(created_by, int):
                 return True
-            else:
-                self.errors.append("Created by should be an Integer")
-                return False
-        else:
-            self.errors.append("redflag owner should not be blank")
+            self.errors.append("Created by should be an Integer")
             return False
+        self.errors.append("redflag owner should not be blank")
+        return False
 
     def validate_title(self, title):
         """Validate Title."""
         if not is_empty(title):
             if not has_special_characters(title):
                 return True
-            else:
-                self.errors.append(("Title cannot contain special characters"))
-        else:
-            self.errors.append("Title cannot be empty")
-            return False
+            self.errors.append(("Title cannot contain special characters"))
+        self.errors.append("Title cannot be empty")
+        return False
 
     def validate_location(self, location):
         """Validate location."""
@@ -56,24 +52,24 @@ class RedFlagValidators(object):
                     lat = None
                 if longitude is not None and lat is not None:
                     return True
-                else:
-                    self.errors.append(
-                            "Coordinates should be floating point values")
-                    return False
-            else:
-                self.errors.append("Two coordinates required")
+                self.errors.append(
+                    "Coordinates should be floating point values")
                 return False
-        else:
-            self.errors.append("Location should not be empty")
+            self.errors.append("Two coordinates required")
             return False
+        self.errors.append("Location should not be empty")
+        return False
 
     def validate_comment(self, comment):
         """Validate comment."""
         if not is_empty(comment):
-            return True
-        else:
-            self.errors.append("Comments cannot be empty")
+            if not has_special_characters(comment):
+                return True
+            self.errors.append("Comments cannot contain {}".
+                               format("special characters"))
             return False
+        self.errors.append("Comments cannot be empty")
+        return False
 
 
 class RedFlagModel(RedFlagValidators):
@@ -89,18 +85,14 @@ class RedFlagModel(RedFlagValidators):
             comment(str): A description of the redflag
         """
         super().__init__()
-        self.id = ''
+        self.incident_id = ''
         self.created_by = created_by
         self.created_on = datetime.datetime.now()
         self.location = location
-        self.status = ''
         self.title = title
-        self.unique_identifier = ''
         self.comment = comment
-        self.images = []
-        self.videos = []
 
-    def save(self, db):
+    def save(self, incident_list):
         """Save redflag to db.
 
         args:
@@ -110,12 +102,12 @@ class RedFlagModel(RedFlagValidators):
            self.validate_location(self.location) and \
            self.validate_comment(self.comment) and \
            self.validate_title(self.title):
-            self.id = len(db) + 1
-            db.append({self.id: self.describe_redflag()})
-            return {'status': True, 'message': {"Id": self.id,
-                    "message": "Successfuly created redflag"}}
-        else:
-            return {'status': False, 'message': {'errors': self.errors}}
+            self.incident_id = len(incident_list) + 1
+            incident_list.append({self.incident_id: self.describe_redflag()})
+            return {'status': True,
+                    'message': {"Id": self.incident_id,
+                                "message": "Successfuly created redflag"}}
+        return {'status': False, 'message': {'errors': self.errors}}
 
     @classmethod
     def find_redflag(cls, redflag_id, redflag_list):
@@ -124,6 +116,7 @@ class RedFlagModel(RedFlagValidators):
             for key, value in redflag.items():
                 if str(key) == str(redflag_id):
                     return value
+                return None
 
     @classmethod
     def update_resource(cls, redflag_id, redflag_list, **kwargs):
@@ -137,7 +130,7 @@ class RedFlagModel(RedFlagValidators):
                             if str(key) == str(redflag_id):
                                 value[update_key] = update_value
                                 return {'status': True, 'message': value['Id']}
-        return {'status': False, 'message': 'That resource cannot be found'}
+        return {'status': False, 'message': 'That redflag cannot be found'}
 
     @classmethod
     def delete_redflag(cls, redflag_id, redflag_list):
@@ -147,6 +140,7 @@ class RedFlagModel(RedFlagValidators):
                 if str(key) == str(redflag_id):
                     redflag_list.remove(redflag)
                     return True
+                return False
 
     def describe_redflag(self):
         """Return the object description.
@@ -156,20 +150,16 @@ class RedFlagModel(RedFlagValidators):
 
         """
         return {
-            'Id': self.id,
+            'Id': self.incident_id,
             'Created By': int(self.created_by),
             'Date Created': str(self.created_on),
             'Location': self.location,
-            'Status': self.status,
             'Comment': self.comment,
-            'Images': self.images,
-            'Videos': self.videos,
-            'Title': self.title,
-            'Unique Identifier': self.unique_identifier
+            'Title': self.title
         }
 
 
-class UserValidators(object):
+class UserValidators():
     """Validate user fields."""
 
     def __init__(self):
@@ -181,12 +171,10 @@ class UserValidators(object):
         if not is_empty(email):
             if is_email(email):
                 return True
-            else:
-                self.errors.append('Invalid Email Address')
-                return False
-        else:
-            self.errors.append("Email should not be blank")
+            self.errors.append('Invalid Email Address')
             return False
+        self.errors.append("Email should not be blank")
+        return False
 
     def validate_password(self, password):
         """Validate password."""
@@ -195,16 +183,15 @@ class UserValidators(object):
                 return True
             self.errors.append("Password should be atleast eight characters")
             return False
-        else:
-            self.errors.append("Password should not be blank")
+        self.errors.append("Password should not be blank")
+        return False
 
     def match_password(self, password, confirm_passowrd):
         """Match passwords."""
         if password == confirm_passowrd:
             return True
-        else:
-            self.errors.append("Passwords should match")
-            return False
+        self.errors.append("Passwords should match")
+        return False
 
 
 class User(UserValidators):
@@ -221,7 +208,7 @@ class User(UserValidators):
         super().__init__()
         self.email = email
         self.password = password
-        self.id = ''
+        self.user_id = ''
 
     def sign_up(self, confirm_passowrd, users):
         """Register user.
@@ -234,7 +221,7 @@ class User(UserValidators):
            self.validate_password(confirm_passowrd):
             if self.match_password(confirm_passowrd, self.password):
                 if not self.find_user(self.email, users):
-                    self.id = len(users) + 1
+                    self.user_id = len(users) + 1
                     users.append({self.email: self.describe_user()})
                     return {'status': True,
                             'message': {"Id": self.email,
@@ -242,7 +229,7 @@ class User(UserValidators):
                                         "You have successfuly signed up"}}
                 return {'status': False,
                         'message': self.errors.
-                        append("That email is already taken")}
+                                   append("That email is already taken")}
             return {'status': False, 'message': {'errors': self.errors}}
         return {'status': False, 'message': {'errors': self.errors}}
 
@@ -251,7 +238,7 @@ class User(UserValidators):
         return {
             "Email": self.email,
             "Password": self.password,
-            "Id": self.id
+            "Id": self.user_id
         }
 
     @classmethod
@@ -261,6 +248,7 @@ class User(UserValidators):
             for key, value in user.items():
                 if key == email:
                     return value
+                return None
 
     def login(self, email, password, login_list, users):
         """Signin user.
@@ -274,7 +262,7 @@ class User(UserValidators):
             user = self.find_user(email, users)
             if isinstance(user, dict):
                 if self.match_password(password, user['Password']):
-                    login_list.append({'Email': email, 'Id':user['Id']})
+                    login_list.append({'Email': email, 'Id': user['Id']})
                     return {'status': True, 'message': login_list}
                 return {'status': False,
                         'message': 'Invalid password/email combination'}
@@ -285,7 +273,7 @@ class User(UserValidators):
     @classmethod
     def logout(cls, user_id, logged_in):
         """Log user out."""
-        if len(logged_in) != 0:
+        if logged_in:
             # loop through the list of users
             for user in logged_in:
                 # loop through the values of a dictionary in the list
@@ -298,5 +286,4 @@ class User(UserValidators):
                                 'message': 'Successfuly logged out'}
                 return {'status': False,
                         'message': 'That user is not logged in'}
-        else:
-            return {'status': False, 'message': 'That user is not logged in'}
+        return {'status': False, 'message': 'That user is not logged in'}

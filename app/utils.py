@@ -11,6 +11,7 @@ def is_empty(value):
     """
     if value.isspace() or value == "":
         return True
+    return False
 
 
 def has_special_characters(value):
@@ -19,8 +20,9 @@ def has_special_characters(value):
     args:
         value(str): String to check for special characters
     """
-    if not re.match("^[a-zA-Z0-9 _]*$", value):
+    if not re.match("^[a-zA-Z0-9 _ . ,]*$", value):
         return True
+    return False
 
 
 def is_email(email):
@@ -32,12 +34,15 @@ def is_email(email):
     if re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",
                 email):
         return True
+    return False
+
 
 def is_valid_password(password):
-        """Check if password meets specifications.
+    """Check if password meets specifications.
 
-        args:
-            password(str): string to validate
-        """
-        if len(password) >= 8:
-            return True
+    args:
+        password(str): string to validate
+    """
+    if len(password) >= 8:
+        return True
+    return False

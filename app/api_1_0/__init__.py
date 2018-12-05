@@ -3,8 +3,8 @@ from flask import Blueprint
 
 from flask_restful import Api
 
-v1 = Blueprint('v1', __name__, url_prefix='/api/v1')
+version_one = Blueprint('v1', __name__, url_prefix='/api/v1')
 
-api = Api(v1)
+API = Api(version_one, catch_all_404s=True)
 
 from app.api_1_0 import routes

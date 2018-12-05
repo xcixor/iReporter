@@ -48,7 +48,7 @@ class Production(Config):
 
 
 # Register the configurations
-config = {
+CONFIG = {
     'development': Development,
     'testing': Testing,
     'production': Production,

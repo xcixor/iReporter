@@ -4,6 +4,14 @@ import psycopg2
 
 
 def connect(db_config):
+    """Create a db connection.
+
+    args:
+        db_config(dict): Database url variables
+
+    returns:
+        conn(connection): A connection to the database
+    """
     conn = None
     try:
         print('Connecting to db...')
@@ -18,6 +26,7 @@ def connect(db_config):
         if conn is not None:
             print("Connected to db")
             return conn
+        return None
 
 
 def init_db(db_config):
