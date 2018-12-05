@@ -3,6 +3,8 @@ from flask_restful import Resource, reqparse
 
 from app.api_1_0.models import RedFlagModel, RedFlagValidators, User
 
+from app.api_1_0.controller import Controller
+
 from app.errors import bad_request, not_found, no_content
 
 
@@ -11,6 +13,8 @@ DB = []
 USERS = []
 
 LOGGED_IN = []
+
+CONTROLLER = Controller()
 
 
 class RedFlag(Resource):
@@ -168,8 +172,8 @@ class Signin(Resource):
         args = parser.parse_args()
 
         user = User(args['Email'], args['Password'])
-        res = user.login(args['Email'], args['Password'], LOGGED_IN,
-                         USERS)
+        res = CONTROLLER.login(args['Email'], args['Password'],
+                               LOGGED_IN, USERS)
         if res.get('status'):
             return {'data': {'message': res.get('message'),
                              'status': 200}}, 200
@@ -181,7 +185,7 @@ class Signout(Resource):
 
     def post(self, user_id):
         """Create user."""
-        res = User.logout(user_id, LOGGED_IN)
+        res = CONTROLLER.logout(user_id, LOGGED_IN)
         if res['status']:
             return {'data': {'message': res['message'], 'status': 200}}, 200
         return bad_request(res['message'])
