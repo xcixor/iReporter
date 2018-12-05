@@ -16,10 +16,6 @@ LOGGED_IN = []
 class RedFlag(Resource):
     """Implements an RedFlag's endpoints."""
 
-    def __init__(self):
-        """Initialize db."""
-        self.incidents = DB
-
     def post(self):
         """Send redflag creation request."""
         parser = reqparse.RequestParser()
@@ -39,7 +35,7 @@ class RedFlag(Resource):
         redflag = RedFlagModel(
             args['Created By'], args['Location'],
             args['Title'], args['Comment'])
-        res = redflag.save(self.incidents)
+        res = redflag.save(DB)
         if res['status']:
             return {'status': 201, 'data': res['message']}, 201
         redflag_validation_errors = res['message']['errors'].copy()
@@ -48,17 +44,13 @@ class RedFlag(Resource):
 
     def get(self):
         """Return all created redflags."""
-        if self.incidents:
-            return {'status': 200, 'data': self.incidents}, 200
+        if DB:
+            return {'status': 200, 'data': DB}, 200
         return no_content('There are no redflags at the moment')
 
 
 class EditRedFlagComment(Resource):
     """Edit RedFlag comment."""
-
-    def __init__(self):
-        """Initialize incidents list."""
-        self.incidents = DB
 
     def patch(self, redflag_id):
         """Edit an redflag."""
@@ -74,7 +66,7 @@ class EditRedFlagComment(Resource):
             comment = args['Comment']
         else:
             return {'status': 400, 'error': validate.errors}, 400
-        res = RedFlagModel.update_resource(redflag_id, self.incidents,
+        res = RedFlagModel.update_resource(redflag_id, DB,
                                            Comment=comment)
         if res['status']:
             return {'status': 200,
@@ -86,10 +78,6 @@ class EditRedFlagComment(Resource):
 
 class EditRedFlagLocation(Resource):
     """Edit RedFlag location."""
-
-    def __init__(self):
-        """Initialize redflags list."""
-        self.incidents = DB
 
     def patch(self, redflag_id):
         """Edit an redflag location."""
@@ -106,7 +94,7 @@ class EditRedFlagLocation(Resource):
         else:
             return {'status': 400, 'error': validate.errors}, 400
 
-        res = RedFlagModel.update_resource(redflag_id, self.incidents,
+        res = RedFlagModel.update_resource(redflag_id, DB,
                                            Location=location)
         if res['status']:
             return {'status': 200,
@@ -119,20 +107,16 @@ class EditRedFlagLocation(Resource):
 class RedFlagManipulation(Resource):
     """Manage redflags."""
 
-    def __init__(self):
-        """Initialize db."""
-        self.incidents = DB
-
     def get(self, redflag_id):
         """Get a specefic redflag."""
-        redflag = RedFlagModel.find_redflag(redflag_id, self.incidents)
+        redflag = RedFlagModel.find_redflag(redflag_id, DB)
         if isinstance(redflag, dict):
             return {'status': 200, 'data': redflag}, 200
         return not_found('That redflag cannot be found')
 
     def delete(self, redflag_id):
         """Delete an redflag."""
-        res = RedFlagModel.delete_redflag(redflag_id, self.incidents)
+        res = RedFlagModel.delete_redflag(redflag_id, DB)
         if res:
             return {'status': 200,
                     'data': "redflag successfuly deleted"}, 200
@@ -141,10 +125,6 @@ class RedFlagManipulation(Resource):
 
 class Signup(Resource):
     """Register user."""
-
-    def __init__(self):
-        """Initialize users list."""
-        self.users = USERS
 
     def post(self):
         """Create user."""
@@ -164,7 +144,7 @@ class Signup(Resource):
         args = parser.parse_args()
 
         user = User(args['Email'], args['Password'])
-        res = user.sign_up(args['Confirm Password'], self.users)
+        res = user.sign_up(args['Confirm Password'], USERS)
         if res.get('status'):
             return {'data': {'message': res.get('message'),
                              'status': 201}}, 201
@@ -173,11 +153,6 @@ class Signup(Resource):
 
 class Signin(Resource):
     """Signup user."""
-
-    def __init__(self):
-        """Initialize login list."""
-        self.logged_in = LOGGED_IN
-        self.users = USERS
 
     def post(self):
         """Create user."""
@@ -193,8 +168,8 @@ class Signin(Resource):
         args = parser.parse_args()
 
         user = User(args['Email'], args['Password'])
-        res = user.login(args['Email'], args['Password'], self.logged_in,
-                         self.users)
+        res = user.login(args['Email'], args['Password'], LOGGED_IN,
+                         USERS)
         if res.get('status'):
             return {'data': {'message': res.get('message'),
                              'status': 200}}, 200
@@ -204,13 +179,9 @@ class Signin(Resource):
 class Signout(Resource):
     """Signup user."""
 
-    def __init__(self):
-        """Initialize login list."""
-        self.logged_in = LOGGED_IN
-
     def post(self, user_id):
         """Create user."""
-        res = User.logout(user_id, self.logged_in)
+        res = User.logout(user_id, LOGGED_IN)
         if res['status']:
             return {'data': {'message': res['message'], 'status': 200}}, 200
         return bad_request(res['message'])
