@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/xcixor/iReporter.svg?branch=develop)](https://travis-ci.org/xcixor/iReporter)
+[![Coverage Status](https://coveralls.io/repos/github/xcixor/iReporter/badge.svg?branch=chore-update-readme-162337742)](https://coveralls.io/github/xcixor/iReporter?branch=devlop)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b86067db9823606adfed/maintainability)](https://codeclimate.com/github/xcixor/iReporter/maintainability)
 ## iReporter
 iReporter is an a whistle blowing application that enables people to raise concerns about issues that are affecting them to the authorities.
 ## Motivation
@@ -7,11 +10,6 @@ Poor services in the private and public sector, increasing national debt and poo
 - Unix based OS
 - Git
 - venv
-## Build Status
-[![Build Status](https://travis-ci.org/xcixor/iReporter.svg?branch=develop)](https://travis-ci.org/xcixor/iReporter)
-## Maintenance
-[![Coverage Status](https://coveralls.io/repos/github/xcixor/iReporter/badge.svg?branch=chore-update-readme-162337742)](https://coveralls.io/github/xcixor/iReporter?branch=devlop)
-[![Maintainability](https://api.codeclimate.com/v1/badges/b86067db9823606adfed/maintainability)](https://codeclimate.com/github/xcixor/iReporter/maintainability)
 ## Built with
 - Python
 - Postgres
