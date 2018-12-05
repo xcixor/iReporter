@@ -6,8 +6,6 @@ from instance.config import CONFIG
 
 from app.api_1_0 import version_one as v_1
 
-from manage import init_db
-
 
 def create_app(configuration):
     """Set up app.
@@ -23,8 +21,6 @@ def create_app(configuration):
     # configure app
     app.config.from_object(CONFIG[configuration])
     CONFIG[configuration].init_app(app)
-    db_config = CONFIG[configuration].db
-    init_db(db_config)
 
     # register blueprints
     app.register_blueprint(v_1)

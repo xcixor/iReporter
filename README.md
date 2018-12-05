@@ -30,19 +30,7 @@ Poor services in the private and public sector, increasing national debt and poo
 ### Step #3: Set up Postgres locally on your machine and create a database
 You can install Postgres for ubuntu 16.04 [here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04) or for mac [here](https://medium.com/@Umesh_Kafle/postgresql-and-postgis-installation-in-mac-os-87fa98a6814d). Create a Postgres user and password and create a database.
 
-### Step #4 set up .env variables
-- Some data is required by the application to run. This includes database setup and as the data varies from
-  development environment to the other, its placed on the .env file. The variables are set as below.
-    - create the .env file
-    - open the file in the editor add the following information
-        - export HOST="localhost"
-        - export PORT="5432"
-        - export DATABASE_NAME=the db to use during development
-        - export USER=the user of the password
-        - export PASSWORD=password of postgres user
-    - run the following command to activate the environment variables
-        -       source .env
-### Step #5 start the app
+### Step #4 start the app
 To start the app run the command below
 -     python run.py
 Test the endpoints in the next section with Postman
