@@ -110,7 +110,7 @@ class RedFlagManipulation(Resource):
     def get(self, redflag_id):
         """Get a specefic redflag."""
         redflag = RedFlagModel.find_redflag(redflag_id, DB)
-        if isinstance(redflag, dict):
+        if redflag is not None:
             return {'status': 200, 'data': redflag}, 200
         return not_found('That redflag cannot be found')
 

@@ -73,7 +73,6 @@ class TestRecord(unittest.TestCase):
         res = self.client().post('/api/v1/redflags', data=redflag)
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
-        print(res)
         self.assertEqual(res['message']['Created By'],
                          'Created By is required')
 
@@ -174,7 +173,7 @@ class TestRecord(unittest.TestCase):
         result = self.client().get('/api/v1/redflags/1')
         self.assertEqual(result.status_code, 200)
         result = result.get_json()
-        self.assertDictContainsSubset(self.redflag, result['data'])
+        self.assertDictContainsSubset(self.redflag, result['data']['1'])
 
     def test_get_non_existing_redflag_false(self):
         """Test cannot get non existing redflag."""
@@ -246,6 +245,7 @@ class TestRecord(unittest.TestCase):
         }
         res = self.client().patch('/api/v1/redflags/1/comments',
                                   data=edit_data)
+        print(res.get_json(), '****************')
         self.assertEqual(res.status_code, 400)
         res = res.get_json()
         self.assertEqual(res['error'][0], "Comments cannot be empty")
@@ -270,7 +270,7 @@ class TestRecord(unittest.TestCase):
         edit_data = {
             "Location": "23.4, 23.6"
         }
-        res = self.client().patch('/api/v1/redflags/1/location',
+        res = self.client().patch('/api/v1/redflags/{}/location'.format(int(1)),
                                   data=edit_data)
         self.assertEqual(res.status_code, 200)
         res = res.get_json()

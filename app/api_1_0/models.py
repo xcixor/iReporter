@@ -15,12 +15,6 @@ class RedFlagValidators():
         """Verify and set created_by."""
         if creator:
             created_by = creator
-            # try:
-            #     created_by = int(creator)
-            # except TypeError:
-            #     created_by = None
-            # if created_by is not None:
-            #     return True
             if isinstance(created_by, int):
                 return True
             self.errors.append("Created by should be an Integer")
@@ -112,35 +106,36 @@ class RedFlagModel(RedFlagValidators):
     @classmethod
     def find_redflag(cls, redflag_id, redflag_list):
         """Retrieve an redflag."""
-        for redflag in redflag_list:
-            for key, value in redflag.items():
-                if str(key) == str(redflag_id):
-                    return value
-                return None
+        comp = [incident for incident in redflag_list if next(iter(incident)) == redflag_id]
+        if comp:
+            return comp[0]
+        return None
 
     @classmethod
     def update_resource(cls, redflag_id, redflag_list, **kwargs):
         """Update an redflag location."""
         redflag = cls.find_redflag(redflag_id, redflag_list)
-        if isinstance(redflag, dict):
-            for update_key, update_value in kwargs.items():
-                if update_key in redflag:
-                    for redflag_value in redflag_list:
-                        for key, value in redflag_value.items():
-                            if str(key) == str(redflag_id):
-                                value[update_key] = update_value
-                                return {'status': True, 'message': value['Id']}
-        return {'status': False, 'message': 'That redflag cannot be found'}
+        if redflag:
+            update_redflag = cls.get_dict_values(redflag)
+            update_redflag.update(kwargs)
+            return {'status': True, 'message': update_redflag['Id']}
+        else:
+            return {'status': False, 'message': 'That redflag cannot be found'}
+
+    @staticmethod
+    def get_dict_values(dict_value):
+        for key, value in dict_value.items():
+            return value
 
     @classmethod
     def delete_redflag(cls, redflag_id, redflag_list):
         """Delete an redflag."""
-        for redflag in redflag_list:
-            for key, value in redflag.items():
-                if str(key) == str(redflag_id):
-                    redflag_list.remove(redflag)
-                    return True
-                return False
+        incident = RedFlagModel.find_redflag(redflag_id, redflag_list)
+        print(incident)
+        if incident:
+            redflag_list.remove(incident)
+            return True
+        return False
 
     def describe_redflag(self):
         """Return the object description.
@@ -274,12 +269,8 @@ class User(UserValidators):
     def logout(cls, user_id, logged_in):
         """Log user out."""
         if logged_in:
-            # loop through the list of users
             for user in logged_in:
-                # loop through the values of a dictionary in the list
                 for key, value in user.items():
-                    # check if string equivalents dict\'s Id and passed
-                    # is match
                     if str(user['Id']) == str(user_id):
                         logged_in.remove(user)
                         return {'status': True,
