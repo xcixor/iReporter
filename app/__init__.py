@@ -6,6 +6,8 @@ from instance.config import CONFIG
 
 from app.api_1_0 import version_one as v_1
 
+from app.decorators import errors
+
 
 def create_app(configuration):
     """Set up app.
@@ -24,15 +26,6 @@ def create_app(configuration):
 
     # register blueprints
     app.register_blueprint(v_1)
-
-    @app.errorhandler(404)
-    def page_not_found(e):
-        """Show custom error for inexisting resource."""
-        return jsonify({"error": "Resource not found"}), 404
-
-    @app.errorhandler(500)
-    def page_not_found(e):
-        """Show custom error for inexisting resource."""
-        return jsonify({"error": "Internal Server error"}), 500
+    app.register_blueprint(errors)
 
     return app
