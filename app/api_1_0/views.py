@@ -3,31 +3,29 @@ from flask_restful import Resource, reqparse
 
 from app.api_1_0.models import RedFlagModel, RedFlagValidators, User
 
-db = []
+from app.api_1_0.controller import Controller
 
-users = []
+from app.errors import bad_request, not_found, no_content
 
-logged_in = []
+
+DB = []
+USERS = []
+LOGGED_IN = []
+CONTROLLER = Controller()
 
 
 class RedFlag(Resource):
     """Implements an RedFlag's endpoints."""
 
-    def __init__(self):
-        """Initialize db."""
-        self.db = db
-
     def post(self):
         """Send redflag creation request."""
         parser = reqparse.RequestParser()
         parser.add_argument('Created By',
-                            type=str, help='Created By is required',
+                            type=int, help='Created By is required',
                             required=True)
         parser.add_argument('Location', type=str,
                             help='Location is required',
                             required=True)
-        parser.add_argument('Images', type=str)
-        parser.add_argument('Video', type=str)
         parser.add_argument('Comment', type=str,
                             help='Comment is required',
                             required=True)
@@ -38,27 +36,22 @@ class RedFlag(Resource):
         redflag = RedFlagModel(
             args['Created By'], args['Location'],
             args['Title'], args['Comment'])
-        res = redflag.save(db)
+        res = redflag.save(DB)
         if res['status']:
             return {'status': 201, 'data': res['message']}, 201
         redflag_validation_errors = res['message']['errors'].copy()
         redflag.errors.clear()
-        return {'status': 400, 'errors': redflag_validation_errors}, 400
+        return bad_request(redflag_validation_errors)
 
     def get(self):
         """Return all created redflags."""
-        if len(self.db) != 0:
-            return {'status': 200, 'data': self.db}, 200
-        else:
-            return {'data': "There are no redflags at the moment",
-                    'status': 404}, 404
+        if DB:
+            return {'status': 200, 'data': DB}, 200
+        return no_content('There are no redflags at the moment')
 
 
 class EditRedFlagComment(Resource):
     """Edit RedFlag comment."""
-
-    def __init__(self):
-        self.db = db
 
     def patch(self, redflag_id):
         """Edit an redflag."""
@@ -74,19 +67,18 @@ class EditRedFlagComment(Resource):
             comment = args['Comment']
         else:
             return {'status': 400, 'error': validate.errors}, 400
-        res = RedFlagModel.update_resource(redflag_id, self.db,
-                                            Comment=comment)
+        res = RedFlagModel.update_resource(redflag_id, DB,
+                                           Comment=comment)
         if res['status']:
-            return {'status': 200, 'data': {'Id': res['message'],
-                    'message': 'Updated red-flag record’s comment'}}, 200
-        return {'status': 404, 'error': res['message']}, 404
+            return {'status': 200,
+                    'data': {'Id': res['message'],
+                             'message': 'Updated red-flag {}'.
+                                        format('record’s comment')}}, 200
+        return not_found(res['message'])
 
 
 class EditRedFlagLocation(Resource):
     """Edit RedFlag location."""
-
-    def __init__(self):
-        self.db = db
 
     def patch(self, redflag_id):
         """Edit an redflag location."""
@@ -103,45 +95,37 @@ class EditRedFlagLocation(Resource):
         else:
             return {'status': 400, 'error': validate.errors}, 400
 
-        res = RedFlagModel.update_resource(redflag_id, self.db,
-                                            Location=location)
+        res = RedFlagModel.update_resource(redflag_id, DB,
+                                           Location=location)
         if res['status']:
-            return {'status': 200, 'data': {'Id': res['message'],
-                                            'message': 'Updated redflag location'}}, 200
-        return {'status': 404, 'error': res['message']}, 404
+            return {'status': 200,
+                    'data': {'Id': res['message'],
+                             'message': 'Updated redflag {}'.
+                                        format('location')}}, 200
+        return not_found(res['message'])
 
 
 class RedFlagManipulation(Resource):
     """Manage redflags."""
 
-    def __init__(self):
-        """Initialize db."""
-        self.db = db
-
     def get(self, redflag_id):
         """Get a specefic redflag."""
-        redflag = RedFlagModel.find_redflag(redflag_id, self.db)
-        if isinstance(redflag, dict):
+        redflag = RedFlagModel.find_redflag(redflag_id, DB)
+        if redflag is not None:
             return {'status': 200, 'data': redflag}, 200
-        else:
-            return {'status': 404, 'error': 'That resource cannot be found'}, 404
+        return not_found('That redflag cannot be found')
 
     def delete(self, redflag_id):
         """Delete an redflag."""
-        res = RedFlagModel.delete_redflag(redflag_id, self.db)
+        res = RedFlagModel.delete_redflag(redflag_id, DB)
         if res:
             return {'status': 200,
                     'data': "redflag successfuly deleted"}, 200
-        return {'status': 404, 'error':
-                'That resource cannot be found'}, 404
+        return not_found('That redflag cannot be found')
 
 
 class Signup(Resource):
     """Register user."""
-
-    def __init__(self):
-        """Initialize users list."""
-        self.users = users
 
     def post(self):
         """Create user."""
@@ -161,19 +145,15 @@ class Signup(Resource):
         args = parser.parse_args()
 
         user = User(args['Email'], args['Password'])
-        res = user.sign_up(args['Confirm Password'], self.users)
+        res = user.sign_up(args['Confirm Password'], USERS)
         if res.get('status'):
-            return {'data': {'message': res.get('message'), 'status': 201}}, 201
-        return {'status': 400, 'errors': user.errors}, 400
+            return {'data': {'message': res.get('message'),
+                             'status': 201}}, 201
+        return bad_request(user.errors)
 
 
 class Signin(Resource):
     """Signup user."""
-
-    def __init__(self):
-        """Initialize login list."""
-        self.logged_in = logged_in
-        self.users = users
 
     def post(self):
         """Create user."""
@@ -189,23 +169,20 @@ class Signin(Resource):
         args = parser.parse_args()
 
         user = User(args['Email'], args['Password'])
-        res = user.login(args['Email'], args['Password'], self.logged_in,
-                         self.users)
+        res = CONTROLLER.login(args['Email'], args['Password'],
+                               LOGGED_IN, USERS)
         if res.get('status'):
-            return {'data': {'message': res.get('message'), 'status': 200}}, 200
-        return {'status': 400, 'errors': res['message']}, 400
+            return {'data': {'message': res.get('message'),
+                             'status': 200}}, 200
+        return bad_request(res['message'])
 
 
 class Signout(Resource):
     """Signup user."""
 
-    def __init__(self):
-        """Initialize login list."""
-        self.logged_in = logged_in
-
     def post(self, user_id):
         """Create user."""
-        res = User.logout(user_id, self.logged_in)
+        res = CONTROLLER.logout(user_id, LOGGED_IN)
         if res['status']:
             return {'data': {'message': res['message'], 'status': 200}}, 200
-        return {'status': 400, 'errors': res['message']}, 400
+        return bad_request(res['message'])
