@@ -9,11 +9,8 @@ from app.errors import bad_request, not_found, no_content
 
 
 DB = []
-
 USERS = []
-
 LOGGED_IN = []
-
 CONTROLLER = Controller()
 
 
