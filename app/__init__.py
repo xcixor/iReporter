@@ -11,7 +11,6 @@ from app.decorators import errors
 
 def create_app(configuration):
     """Set up app.
-
     args:
         configuration(str): name of configuration to use for current instace
     returns:
@@ -22,7 +21,6 @@ def create_app(configuration):
 
     # configure app
     app.config.from_object(CONFIG[configuration])
-    CONFIG[configuration].init_app(app)
 
     # register blueprints
     app.register_blueprint(v_1)
