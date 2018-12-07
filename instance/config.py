@@ -6,13 +6,13 @@ import os
 class Config:
     """Contains the basic settings for all configurations."""
 
-    debug = False
+    PROPAGATE_EXCEPTIONS = True
 
 
 class Development(Config):
     """Contains configurations to be used by developer."""
 
-    DEBUG = False
+    DEBUG = True
 
 
 class Testing(Config):
@@ -25,7 +25,6 @@ class Production(Config):
     """Contains configurations for production setting."""
 
     DEBUG = False
-    PROPAGATE_EXCEPTIONS = True
 
 
 # Register the configurations
